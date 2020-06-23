@@ -39,10 +39,10 @@ class MyFirstGUI:
         self.label = tkinter.Label(master, text="This is our first GUI!")
         self.label.pack()
 
-        self.start_camera_button = tkinter.Button(master, text="Start Camera", command=self.startCamera)
+        self.start_camera_button = tkinter.Button(master, text="Start Camera", command=self.startCamera).grid(row=1, column=1)
         self.start_camera_button.pack()
 
-        self.stop_camera_button = tkinter.Button(master, text="Stop Camera", command=self.stopCamera)
+        self.stop_camera_button = tkinter.Button(master, text="Stop Camera", command=self.stopCamera).grid(row=1, column=2)
         self.stop_camera_button.pack()
 
         self.close_button = tkinter.Button(master, text="Quit", command=self.quit)
