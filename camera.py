@@ -10,6 +10,7 @@ class Camera:
         self.camera = PiCamera(
             framerate=Fraction(1, 6)
         )
+        self.camera.preview_fullscreen = False
 
     def setLowLightMode(self):
         self.camera.sensor_mode = 3
@@ -46,11 +47,6 @@ class MyFirstGUI:
 
         self.close_button = tkinter.Button(master, text="Quit", command=self.quit)
         self.close_button.pack()
-
-    def buttonRack(self):
-        return [
-
-        ]
 
     def setLowLightMode(self):
         self.camera.setLowLightMode()
