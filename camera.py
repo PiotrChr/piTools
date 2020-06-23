@@ -60,7 +60,7 @@ class MyFirstGUI:
 
     def startCamera(self):
         self.camera.start()
-        sleep(5)
+        sleep(10)
         self.camera.stop()
 
     def stopCamera(self):
@@ -76,6 +76,6 @@ my_gui = MyFirstGUI(root)
 
 root.overrideredirect(True)
 root.overrideredirect(False)
-root.attributes('-fullscreen',True)
+root.attributes('-fullscreen', True)
 
 root.mainloop()
