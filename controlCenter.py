@@ -9,8 +9,8 @@ import cv2
 
 
 class ControlCenterGUI:
-    BUTTON_HEIGHT = 5
-    BUTTON_WIDTH = 15
+    BAR_BUTTON_HEIGHT = 2
+    BAR_BUTTON_WIDTH = 15
 
     def __init__(self, master):
         self.master = master
@@ -50,11 +50,11 @@ class ControlCenterGUI:
 
         layout.antFrame = self.getAntFrame(layout)
         layout.antFrame.grid(row=2, column=1)
-        layout.closeButton = tkinter.Button(layout, text="Quit", command=self.quit, width=self.BUTTON_WIDTH * 2,
-                                            height=self.BUTTON_HEIGHT).grid(row=4,
-                                                                            columnspan=2,
-                                                                            padx=5,
-                                                                            pady=5)
+        layout.closeButton = tkinter.Button(layout, text="Quit", command=self.quit, width=self.BAR_BUTTON_WIDTH * 2,
+                                            height=self.BAR_BUTTON_HEIGHT).grid(row=4,
+                                                                                columnspan=2,
+                                                                                padx=5,
+                                                                                pady=5)
         self.layout = layout
 
     def getStatusFrame(self, container):
@@ -78,14 +78,81 @@ class ControlCenterGUI:
 
         return statusFrame
 
-    def getAntFrame(self, container):
+    def getStatusSection(self, container):
+        statusSection = tkinter.Frame(container)
+
+        statusFrame = self.getStatusFrame(statusSection)
+        statusFrame.grid(row=0)
+        statusSection.statusFrame = statusFrame
+
+        quitButton = tkinter.Button(statusSection, text="Quit", command=self.quit,
+                                    width=self.BAR_BUTTON_WIDTH,
+                                    height=self.BAR_BUTTON_WIDTH)
+        quitButton.grid(row=1)
+        statusSection.quitButton = quitButton
+
+        restartButton = tkinter.Button(statusSection, text="Restart", command=self.restart,
+                                       width=self.BAR_BUTTON_WIDTH,
+                                       height=self.BAR_BUTTON_WIDTH)
+        restartButton.grid(row=2)
+        statusSection.restartButton = restartButton
+
+        haltButton = tkinter.Button(statusSection, text="Halt", command=self.halt,
+                                    width=self.BAR_BUTTON_WIDTH,
+                                    height=self.BAR_BUTTON_WIDTH)
+        statusSection.grid(row=3)
+        statusSection.haltButton = haltButton
+
+        return statusSection
+
+    def getRightBar(self, container):
+        rightBar = tkinter.Frame(container)
+
+        statusSection = self.getStatusSection(rightBar)
+        rightBar.statusSection = statusSection
+
+        antSection = self.getAntSection(rightBar)
+        rightBar.antSection = antSection
+
+        printerSection = self.getPrinterSection(rightBar)
+        rightBar.printerSection = printerSection
+
+    def getPrinterSection(self, container):
+
+    def getAntSection(self, container):
         antFrame = tkinter.Frame(container)
-        antFrame.startButton = tkinter.Button(antFrame, text="Start Camera", command=self.startCamera,
-                                              width=self.BUTTON_WIDTH,
-                                              height=self.BUTTON_HEIGHT).grid(row=1, padx=5, pady=5)
-        antFrame.stopButton = tkinter.Button(antFrame, text="Stop Camera", command=self.stopCamera,
-                                             width=self.BUTTON_WIDTH,
-                                             height=self.BUTTON_HEIGHT).grid(row=2, padx=5, pady=5)
+
+        cameraLabel = tkinter.Label(text="Camera")
+        cameraLabel.grid(row=0, columnspan=2)
+        antFrame.cameraLabel = cameraLabel
+
+        cameraStartButton = tkinter.Button(antFrame, text="Start", command=self.startAntCamera,
+                                           width=self.BAR_BUTTON_WIDTH,
+                                           height=self.BAR_BUTTON_HEIGHT)
+        cameraStartButton.grid(row=1, column=0)
+        antFrame.cameraStartButton = cameraStartButton
+
+        cameraStopButton = tkinter.Button(antFrame, text="Stop", command=self.stopAntCamera,
+                                          width=self.BAR_BUTTON_WIDTH,
+                                          height=self.BAR_BUTTON_HEIGHT)
+        cameraStopButton.grid(row=1, column=1)
+        antFrame.cameraStopButton = cameraStopButton
+
+        streamLabel = tkinter.Label(text="Stream")
+        streamLabel.grid(row=2, columnspan=2)
+        antFrame.streamLabel = streamLabel
+
+        streamStartButton = tkinter.Button(antFrame, text="Start", command=self.startAntStream,
+                                           width=self.BAR_BUTTON_WIDTH,
+                                           height=self.BAR_BUTTON_HEIGHT)
+        streamStartButton.grid(row=3, column=0)
+        antFrame.streamStrartButton = streamStartButton
+
+        streamStopButton = tkinter.Button(antFrame, text="Stop", command=self.stopAntStream,
+                                          width=self.BAR_BUTTON_WIDTH,
+                                          height=self.BAR_BUTTON_HEIGHT)
+        streamStopButton.grid(row=3, column=1)
+        antFrame.streamStopButton = streamStopButton
 
         return antFrame
 
@@ -120,21 +187,33 @@ class ControlCenterGUI:
         self.master.overrideredirect(False)
         self.master.attributes('-fullscreen', True)
 
-    def startCamera(self):
+    def startAntCamera(self):
         if not hasattr(self, 'vs'):
             self.startCapture()
 
         self.videoLoop()
 
-    def stopCamera(self):
+    def stopAntCamera(self):
         self.stopCameraSignal = True
         sleep(0.5)
         if hasattr(self, 'vs'):
             self.stopCapture()
 
+    def startAntStream(self):
+        sleep(1)
+
+    def stopAntStream(self):
+        sleep(1)
+
     def quit(self):
-        self.stopCamera()
+        self.stopAntCamera()
         self.master.quit()
+
+    def restart(self):
+        sleep(1)
+
+    def halt(self):
+        sleep(1)
 
 
 root = tkinter.Tk()
