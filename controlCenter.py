@@ -9,11 +9,12 @@ import cv2
 
 
 class ControlCenterGUI:
-    BUTTON_HEIGHT = 10
-    BUTTON_WIDTH = 50
+    BUTTON_HEIGHT = 5
+    BUTTON_WIDTH = 15
 
     def __init__(self, master):
         self.master = master
+        self.setFullscreen()
         master.title("Control Center")
         self.initializeV4l2()
         self.stopCameraSignal = False
@@ -27,13 +28,12 @@ class ControlCenterGUI:
         if self.vs.isOpened():
             print("Could not open video device")
 
-        self.vs.set(3, 640)
-        self.vs.set(4, 480)
+        self.vs.set(3, 320)
+        self.vs.set(4, 240)
 
     def stopCapture(self):
-        if self.vs:
-            self.vs.release()
-            del self.vs
+        self.vs.release()
+        del self.vs
 
     def getLayout(self):
         layout = tkinter.Frame(self.master)
@@ -129,7 +129,8 @@ class ControlCenterGUI:
     def stopCamera(self):
         self.stopCameraSignal = True
         sleep(0.5)
-        self.stopCapture()
+        if hasattr(self, 'vs'):
+            self.stopCapture()
 
     def quit(self):
         self.stopCamera()
