@@ -10,14 +10,15 @@ import cv2
 
 class ControlCenterGUI:
     BAR_BUTTON_HEIGHT = 2
-    BAR_BUTTON_WIDTH = 15
+    BAR_BUTTON_WIDTH = 7
 
     BUTTON_TEXT_ON = 'Start'
     BUTTON_TEXT_OFF = 'Stop'
 
     def __init__(self, master):
         self.master = master
-        self.setFullscreen()
+        self.master.geometry('800x480')
+        # self.setFullscreen()
         master.title("Control Center")
         self.initializeV4l2()
         self.stopCameraSignal = False
@@ -31,8 +32,8 @@ class ControlCenterGUI:
         if self.vs.isOpened():
             print("Could not open video device")
 
-        self.vs.set(3, 320)
-        self.vs.set(4, 240)
+        self.vs.set(3, 640)
+        self.vs.set(4, 480)
 
     def stopCapture(self):
         self.vs.release()
@@ -43,7 +44,7 @@ class ControlCenterGUI:
         layout.pack(fill='both', expand=True)
 
         cameraFrameLabel = tkinter.Label(layout)
-        cameraFrameLabel.pack(side='left', fill='both', expand=True, padx=5, pady=5)
+        cameraFrameLabel.pack(side='left', fill='y', expand=False)
         layout.cameraFrameLabel = cameraFrameLabel
 
         rightBar = self.getRightBar(layout)
@@ -55,6 +56,7 @@ class ControlCenterGUI:
     def updateCameraFrame(self, image, imagetk):
         self.layout.cameraFrameLabel.currentImage = image
         self.layout.cameraFrameLabel.imgtk = imagetk
+        self.layout.cameraFrameLabel.config(image=imagetk)  # show the image
         self.layout.cameraFrameLabel.config(image=imagetk)  # show the image
 
     def getStatusFrame(self, container):
@@ -81,26 +83,32 @@ class ControlCenterGUI:
     def getStatusSection(self, container):
         statusSection = tkinter.Frame(container)
 
-        statusFrame = self.getStatusFrame(statusSection)
-        statusFrame.grid(row=0)
-        statusSection.statusFrame = statusFrame
+        # statusFrame = self.getStatusFrame(statusSection)
+        # statusFrame.grid(row=0)
+        # statusSection.statusFrame = statusFrame
+
+        statusButton = tkinter.Button(statusSection, text="Status", command=self.quit,
+                                      width=self.BAR_BUTTON_WIDTH,
+                                      height=self.BAR_BUTTON_HEIGHT)
+        statusButton.grid(row=0, column=0)
+        statusSection.statusButton = statusButton
 
         quitButton = tkinter.Button(statusSection, text="Quit", command=self.quit,
-                                    width=self.BAR_BUTTON_WIDTH * 2,
+                                    width=self.BAR_BUTTON_WIDTH,
                                     height=self.BAR_BUTTON_HEIGHT)
-        quitButton.grid(row=1)
+        quitButton.grid(row=0, column=1)
         statusSection.quitButton = quitButton
 
         restartButton = tkinter.Button(statusSection, text="Restart", command=self.restart,
-                                       width=self.BAR_BUTTON_WIDTH * 2,
+                                       width=self.BAR_BUTTON_WIDTH,
                                        height=self.BAR_BUTTON_HEIGHT)
-        restartButton.grid(row=2)
+        restartButton.grid(row=1, column=0)
         statusSection.restartButton = restartButton
 
         haltButton = tkinter.Button(statusSection, text="Halt", command=self.halt,
-                                    width=self.BAR_BUTTON_WIDTH * 2,
+                                    width=self.BAR_BUTTON_WIDTH,
                                     height=self.BAR_BUTTON_HEIGHT)
-        haltButton.grid(row=3)
+        haltButton.grid(row=1, column=1)
         statusSection.haltButton = haltButton
 
         return statusSection
@@ -126,7 +134,7 @@ class ControlCenterGUI:
         printerFrame = tkinter.Frame(container)
 
         frameLabel = tkinterUtils.createMediumLabel(printerFrame, "3D printer Control")
-        frameLabel.grid(row=0, columnspan=2)
+        frameLabel.grid(row=0, columnspan=2, sticky='w')
         printerFrame.frameLabel = frameLabel
 
         # Printer Page
@@ -159,18 +167,18 @@ class ControlCenterGUI:
         antFrame = tkinter.Frame(container)
 
         frameLabel = tkinterUtils.createMediumLabel(antFrame, text="Ant Control")
-        frameLabel.grid(row=0, columnspan=2)
+        frameLabel.grid(row=0, columnspan=2, sticky='w')
         antFrame.frameLabel = frameLabel
 
         # Camera
         cameraLabel = tkinterUtils.createSmallLabel(antFrame, text="Camera")
-        cameraLabel.grid(row=1, columnspan=2)
+        cameraLabel.grid(row=1, columnspan=2, sticky='w')
         antFrame.cameraLabel = cameraLabel
 
         cameraStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startAntCamera,
                                            width=self.BAR_BUTTON_WIDTH,
                                            height=self.BAR_BUTTON_HEIGHT)
-        cameraStartButton.grid(row=2, column=0)
+        cameraStartButton.grid(row=2, column=0, sticky='w')
         antFrame.cameraStartButton = cameraStartButton
 
         cameraStopButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_OFF, command=self.stopAntCamera,
@@ -181,7 +189,7 @@ class ControlCenterGUI:
 
         # Stream
         streamLabel = tkinterUtils.createSmallLabel(antFrame, text="Stream")
-        streamLabel.grid(row=3, columnspan=2)
+        streamLabel.grid(row=3, columnspan=2, sticky='w')
         antFrame.streamLabel = streamLabel
 
         streamStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startAntStream,
@@ -198,7 +206,7 @@ class ControlCenterGUI:
 
         # Lights
         lightsLabel = tkinterUtils.createSmallLabel(antFrame, text="Lights")
-        lightsLabel.grid(row=5, columnspan=2)
+        lightsLabel.grid(row=5, columnspan=2, sticky='w')
         antFrame.lightsLabel = lightsLabel
 
         lightsStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startLights,
@@ -215,7 +223,7 @@ class ControlCenterGUI:
 
         # Thermostat
         thermostatLabel = tkinterUtils.createSmallLabel(antFrame, text="Thermostat")
-        thermostatLabel.grid(row=7, columnspan=2)
+        thermostatLabel.grid(row=7, columnspan=2, sticky='w')
         antFrame.thermostatLabel = thermostatLabel
 
         thermostatStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startThermostat,
