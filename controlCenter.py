@@ -17,8 +17,8 @@ class ControlCenterGUI:
 
     def __init__(self, master):
         self.master = master
-        self.master.geometry('800x480')
-        # self.setFullscreen()
+        # self.master.geometry('800x480')
+        self.setFullscreen()
         master.title("Control Center")
         self.initializeV4l2()
         self.stopCameraSignal = False
