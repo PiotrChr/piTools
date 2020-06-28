@@ -1,6 +1,6 @@
 import tkinter
 from PIL import Image, ImageTk
-from library import httpUtils
+from library import httpUtils, tkinterUtils
 from time import sleep
 import os
 import subprocess
@@ -11,6 +11,9 @@ import cv2
 class ControlCenterGUI:
     BAR_BUTTON_HEIGHT = 2
     BAR_BUTTON_WIDTH = 15
+
+    BUTTON_TEXT_ON = 'Start'
+    BUTTON_TEXT_OFF = 'Stop'
 
     def __init__(self, master):
         self.master = master
@@ -37,25 +40,22 @@ class ControlCenterGUI:
 
     def getLayout(self):
         layout = tkinter.Frame(self.master)
-        layout.grid()
-        layout.mainLabel = tkinter.Label(layout, text="Camera Control").grid(row=0, columnspan=2)
-
-        statusFrame = self.getStatusFrame(layout)
-        statusFrame.grid(row=1, column=1)
-        layout.statusFrame = statusFrame
+        layout.pack(fill='both', expand=True)
 
         cameraFrameLabel = tkinter.Label(layout)
-        cameraFrameLabel.grid(row=2, column=0, padx=4, pady=6)
+        cameraFrameLabel.pack(side='left', fill='both', expand=True, padx=5, pady=5)
         layout.cameraFrameLabel = cameraFrameLabel
 
-        layout.antFrame = self.getAntFrame(layout)
-        layout.antFrame.grid(row=2, column=1)
-        layout.closeButton = tkinter.Button(layout, text="Quit", command=self.quit, width=self.BAR_BUTTON_WIDTH * 2,
-                                            height=self.BAR_BUTTON_HEIGHT).grid(row=4,
-                                                                                columnspan=2,
-                                                                                padx=5,
-                                                                                pady=5)
+        rightBar = self.getRightBar(layout)
+        rightBar.pack(side='right', fill='y', padx=5, pady=5)
+        layout.rightBar = rightBar
+
         self.layout = layout
+
+    def updateCameraFrame(self, image, imagetk):
+        self.layout.cameraFrameLabel.currentImage = image
+        self.layout.cameraFrameLabel.imgtk = imagetk
+        self.layout.cameraFrameLabel.config(image=imagetk)  # show the image
 
     def getStatusFrame(self, container):
         statusFrame = tkinter.Frame(container)
@@ -86,21 +86,21 @@ class ControlCenterGUI:
         statusSection.statusFrame = statusFrame
 
         quitButton = tkinter.Button(statusSection, text="Quit", command=self.quit,
-                                    width=self.BAR_BUTTON_WIDTH,
-                                    height=self.BAR_BUTTON_WIDTH)
+                                    width=self.BAR_BUTTON_WIDTH * 2,
+                                    height=self.BAR_BUTTON_HEIGHT)
         quitButton.grid(row=1)
         statusSection.quitButton = quitButton
 
         restartButton = tkinter.Button(statusSection, text="Restart", command=self.restart,
-                                       width=self.BAR_BUTTON_WIDTH,
-                                       height=self.BAR_BUTTON_WIDTH)
+                                       width=self.BAR_BUTTON_WIDTH * 2,
+                                       height=self.BAR_BUTTON_HEIGHT)
         restartButton.grid(row=2)
         statusSection.restartButton = restartButton
 
         haltButton = tkinter.Button(statusSection, text="Halt", command=self.halt,
-                                    width=self.BAR_BUTTON_WIDTH,
-                                    height=self.BAR_BUTTON_WIDTH)
-        statusSection.grid(row=3)
+                                    width=self.BAR_BUTTON_WIDTH * 2,
+                                    height=self.BAR_BUTTON_HEIGHT)
+        haltButton.grid(row=3)
         statusSection.haltButton = haltButton
 
         return statusSection
@@ -109,59 +109,132 @@ class ControlCenterGUI:
         rightBar = tkinter.Frame(container)
 
         statusSection = self.getStatusSection(rightBar)
+        statusSection.grid(row=0)
         rightBar.statusSection = statusSection
 
         antSection = self.getAntSection(rightBar)
+        antSection.grid(row=1)
         rightBar.antSection = antSection
 
         printerSection = self.getPrinterSection(rightBar)
+        printerSection.grid(row=2)
         rightBar.printerSection = printerSection
 
+        return rightBar
+
     def getPrinterSection(self, container):
+        printerFrame = tkinter.Frame(container)
+
+        frameLabel = tkinterUtils.createMediumLabel(printerFrame, "3D printer Control")
+        frameLabel.grid(row=0, columnspan=2)
+        printerFrame.frameLabel = frameLabel
+
+        # Printer Page
+        printerPageButton = tkinter.Button(printerFrame, text='Open printer page', command=self.startAntCamera,
+                                           width=self.BAR_BUTTON_WIDTH * 2,
+                                           height=self.BAR_BUTTON_HEIGHT)
+        printerPageButton.grid(row=1, columnspan=2)
+        printerFrame.cameraStartButton = printerPageButton
+
+        # Printer Camera
+        cameraLabel = tkinterUtils.createSmallLabel(printerFrame, "Camera")
+        cameraLabel.grid(row=2, columnspan=2)
+        printerFrame.cameraLabel = cameraLabel
+
+        cameraStartButton = tkinter.Button(printerFrame, text=self.BUTTON_TEXT_ON, command=self.startPrinterCamera,
+                                           width=self.BAR_BUTTON_WIDTH,
+                                           height=self.BAR_BUTTON_HEIGHT)
+        cameraStartButton.grid(row=3, column=0)
+        printerFrame.cameraStartButton = cameraStartButton
+
+        cameraStopButton = tkinter.Button(printerFrame, text=self.BUTTON_TEXT_OFF, command=self.stopPrinterCamera,
+                                          width=self.BAR_BUTTON_WIDTH,
+                                          height=self.BAR_BUTTON_HEIGHT)
+        cameraStopButton.grid(row=3, column=1)
+        printerFrame.cameraStopButton = cameraStopButton
+
+        return printerFrame
 
     def getAntSection(self, container):
         antFrame = tkinter.Frame(container)
 
-        cameraLabel = tkinter.Label(text="Camera")
-        cameraLabel.grid(row=0, columnspan=2)
+        frameLabel = tkinterUtils.createMediumLabel(antFrame, text="Ant Control")
+        frameLabel.grid(row=0, columnspan=2)
+        antFrame.frameLabel = frameLabel
+
+        # Camera
+        cameraLabel = tkinterUtils.createSmallLabel(antFrame, text="Camera")
+        cameraLabel.grid(row=1, columnspan=2)
         antFrame.cameraLabel = cameraLabel
 
-        cameraStartButton = tkinter.Button(antFrame, text="Start", command=self.startAntCamera,
+        cameraStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startAntCamera,
                                            width=self.BAR_BUTTON_WIDTH,
                                            height=self.BAR_BUTTON_HEIGHT)
-        cameraStartButton.grid(row=1, column=0)
+        cameraStartButton.grid(row=2, column=0)
         antFrame.cameraStartButton = cameraStartButton
 
-        cameraStopButton = tkinter.Button(antFrame, text="Stop", command=self.stopAntCamera,
+        cameraStopButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_OFF, command=self.stopAntCamera,
                                           width=self.BAR_BUTTON_WIDTH,
                                           height=self.BAR_BUTTON_HEIGHT)
-        cameraStopButton.grid(row=1, column=1)
+        cameraStopButton.grid(row=2, column=1)
         antFrame.cameraStopButton = cameraStopButton
 
-        streamLabel = tkinter.Label(text="Stream")
-        streamLabel.grid(row=2, columnspan=2)
+        # Stream
+        streamLabel = tkinterUtils.createSmallLabel(antFrame, text="Stream")
+        streamLabel.grid(row=3, columnspan=2)
         antFrame.streamLabel = streamLabel
 
-        streamStartButton = tkinter.Button(antFrame, text="Start", command=self.startAntStream,
+        streamStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startAntStream,
                                            width=self.BAR_BUTTON_WIDTH,
                                            height=self.BAR_BUTTON_HEIGHT)
-        streamStartButton.grid(row=3, column=0)
-        antFrame.streamStrartButton = streamStartButton
+        streamStartButton.grid(row=4, column=0)
+        antFrame.streamStartButton = streamStartButton
 
-        streamStopButton = tkinter.Button(antFrame, text="Stop", command=self.stopAntStream,
+        streamStopButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_OFF, command=self.stopAntStream,
                                           width=self.BAR_BUTTON_WIDTH,
                                           height=self.BAR_BUTTON_HEIGHT)
-        streamStopButton.grid(row=3, column=1)
+        streamStopButton.grid(row=4, column=1)
         antFrame.streamStopButton = streamStopButton
+
+        # Lights
+        lightsLabel = tkinterUtils.createSmallLabel(antFrame, text="Lights")
+        lightsLabel.grid(row=5, columnspan=2)
+        antFrame.lightsLabel = lightsLabel
+
+        lightsStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startLights,
+                                           width=self.BAR_BUTTON_WIDTH,
+                                           height=self.BAR_BUTTON_HEIGHT)
+        lightsStartButton.grid(row=6, column=0)
+        antFrame.lightsStartButton = lightsStartButton
+
+        lightsStopButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_OFF, command=self.stopLights,
+                                          width=self.BAR_BUTTON_WIDTH,
+                                          height=self.BAR_BUTTON_HEIGHT)
+        lightsStopButton.grid(row=6, column=1)
+        antFrame.lightsStopButton = lightsStopButton
+
+        # Thermostat
+        thermostatLabel = tkinterUtils.createSmallLabel(antFrame, text="Thermostat")
+        thermostatLabel.grid(row=7, columnspan=2)
+        antFrame.thermostatLabel = thermostatLabel
+
+        thermostatStartButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_ON, command=self.startThermostat,
+                                               width=self.BAR_BUTTON_WIDTH,
+                                               height=self.BAR_BUTTON_HEIGHT)
+        thermostatStartButton.grid(row=8, column=0)
+        antFrame.thermostatStartButton = thermostatStartButton
+
+        thermostatStopButton = tkinter.Button(antFrame, text=self.BUTTON_TEXT_OFF, command=self.stopThermostat,
+                                              width=self.BAR_BUTTON_WIDTH,
+                                              height=self.BAR_BUTTON_HEIGHT)
+        thermostatStopButton.grid(row=8, column=1)
+        antFrame.thermostatStopButton = thermostatStopButton
 
         return antFrame
 
     def videoLoop(self):
-        if not hasattr(self.layout, 'antFrame'):
-            raise Exception("AntFrame is not initialized")
-
         if self.stopCameraSignal:
-            self.layout.cameraFrameLabel.config(image='')
+            self.updateCameraFrame('', '')
             self.stopCameraSignal = False
             return
 
@@ -169,10 +242,9 @@ class ControlCenterGUI:
         if ok:  # frame captured without any errors
             cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)  # convert colors from BGR to RGBA
             currentImage = Image.fromarray(cv2image)  # convert image for PIL
-            self.layout.cameraFrameLabel.currentImage = currentImage
             imgtk = ImageTk.PhotoImage(image=currentImage)  # convert image for tkinter
-            self.layout.cameraFrameLabel.imgtk = imgtk
-            self.layout.cameraFrameLabel.config(image=imgtk)  # show the image
+
+            self.updateCameraFrame(currentImage, imgtk)
 
         self.master.after(60, self.videoLoop)
 
@@ -199,10 +271,28 @@ class ControlCenterGUI:
         if hasattr(self, 'vs'):
             self.stopCapture()
 
+    def startPrinterCamera(self):
+        sleep(1)
+
+    def stopPrinterCamera(self):
+        sleep(1)
+
     def startAntStream(self):
         sleep(1)
 
     def stopAntStream(self):
+        sleep(1)
+
+    def startLights(self):
+        sleep(1)
+
+    def stopLights(self):
+        sleep(1)
+
+    def startThermostat(self):
+        sleep(1)
+
+    def stopThermostat(self):
         sleep(1)
 
     def quit(self):
