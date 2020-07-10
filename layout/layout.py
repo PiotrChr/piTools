@@ -120,28 +120,28 @@ class ControlCenterGUI:
         frameLabel.grid(row=0, columnspan=2, sticky='w')
         printerFrame.frameLabel = frameLabel
 
-        # Printer Page
-        printerPageButton = tkinter.Button(printerFrame, text='Open printer page', command=self.startAntCamera,
-                                           width=self.BAR_BUTTON_WIDTH * 2,
-                                           height=self.BAR_BUTTON_HEIGHT)
-        printerPageButton.grid(row=1, columnspan=2)
-        printerFrame.cameraStartButton = printerPageButton
+        # # Printer Page
+        # printerPageButton = tkinter.Button(printerFrame, text='Open printer page', command=self.startAntCamera,
+        #                                    width=self.BAR_BUTTON_WIDTH * 2,
+        #                                    height=self.BAR_BUTTON_HEIGHT)
+        # printerPageButton.grid(row=1, columnspan=2)
+        # printerFrame.cameraStartButton = printerPageButton
 
         # Printer Camera
         cameraLabel = tkinterUtils.createSmallLabel(printerFrame, "Camera")
-        cameraLabel.grid(row=2, columnspan=2)
+        cameraLabel.grid(row=1, columnspan=2)
         printerFrame.cameraLabel = cameraLabel
 
         cameraStartButton = tkinter.Button(printerFrame, text=self.BUTTON_TEXT_ON, command=self.startPrinterCamera,
                                            width=self.BAR_BUTTON_WIDTH,
                                            height=self.BAR_BUTTON_HEIGHT)
-        cameraStartButton.grid(row=3, column=0)
+        cameraStartButton.grid(row=2, column=0)
         printerFrame.cameraStartButton = cameraStartButton
 
         cameraStopButton = tkinter.Button(printerFrame, text=self.BUTTON_TEXT_OFF, command=self.stopPrinterCamera,
                                           width=self.BAR_BUTTON_WIDTH,
                                           height=self.BAR_BUTTON_HEIGHT)
-        cameraStopButton.grid(row=3, column=1)
+        cameraStopButton.grid(row=2, column=1)
         printerFrame.cameraStopButton = cameraStopButton
 
         return printerFrame
@@ -263,8 +263,10 @@ class ControlCenterGUI:
         self.master.attributes('-fullscreen', True)
 
     def startCamera(self, source):
-        if not hasattr(self, 'vs'):
-            self.startCapture(source)
+        if hasattr(self, 'vs'):
+            self.stopCamera()
+
+        self.startCapture(source)
 
         self.videoLoop()
 
