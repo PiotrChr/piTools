@@ -10,31 +10,31 @@ class ControlCenterGUI:
     APP_NAME = 'Control Center'
 
     def __init__(self):
-        self.initializeV4l2()
+        self.initialize_v4l2()
         self.layout = layout.ControlCenterGUI(self.APP_NAME)
-        self.setFullscreen(False)
+        self.set_mode(False)
 
         parser = argparse.ArgumentParser()
         parser.add_argument("-m", "--mode", help="set mode (f or w)")
         args = parser.parse_args()
 
-        self.setFullscreen(args.mode and args.mode == 'f' and True or False)
+        self.set_mode(args.mode and args.mode == 'f' and True or False)
 
-    def initializeV4l2(self):
+    def initialize_v4l2(self):
         # Start on arm only
         if os.uname()[4].startswith("arm") and not os.path.exists('/dev/video0'):
             rpistr = "sudo modprobe bcm2835-v4l2"
             p = subprocess.Popen(rpistr, shell=True, preexec_fn=os.setsid)
             time.sleep(1)
 
-    def setFullscreen(self, fullScreen):
+    def set_mode(self, fullScreen):
         if fullScreen:
-            self.layout.setFullscreen()
+            self.layout.set_fullscreen()
         else:
-            self.layout.setWindowed()
+            self.layout.set_windowed()
 
     def quit(self):
-        self.layout.stopAntCamera()
+        self.layout.stop_camera()
         self.layout.quit()
 
     def start(self):
