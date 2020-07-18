@@ -71,6 +71,17 @@ class TkinterTemplating:
 
         main_frame.right_frame = right_frame
 
+    def create_bar_button(self, container, title=None, action=None):
+        button = tkinter.Button(
+            container,
+            text=title,
+            command=action,
+            width=self.button_width,
+            height=self.button_height
+        )
+
+        return button
+
     @staticmethod
     def raise_frame(frame):
         frame.tkraise()
