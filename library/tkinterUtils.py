@@ -45,7 +45,7 @@ class TkinterTemplating:
 
         return button_frame
 
-        # TODO: Here
+        # TODO: Here, Move to the main frame
     def create_main_frame(self, container, right_container_items):
         main_frame = tkinter.Frame(
             container,
