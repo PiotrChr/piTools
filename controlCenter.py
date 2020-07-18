@@ -4,12 +4,12 @@ import time
 from layout import layout
 import argparse
 
-
 class ControlCenterGUI:
     CURRENT_VERSION = '0.1'
     APP_NAME = 'Control Center'
 
     def __init__(self):
+
         self.initialize_v4l2()
         self.layout = layout.ControlCenterGUI(self.APP_NAME)
         self.set_mode(False)

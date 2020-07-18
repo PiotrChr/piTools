@@ -47,14 +47,29 @@ class TkinterTemplating:
 
         # TODO: Here
     def create_main_frame(self, container, right_container_items):
-        main_frame = tkinter.Frame(container)
+        main_frame = tkinter.Frame(
+            container,
+            width=self.frame_width,
+            height=self.frame_height
+        )
 
-        left_frame = tkinter.Frame(main_frame)
+        left_frame = tkinter.Frame(
+            main_frame,
+            width=self.frame_width * self.left_right_ratio,
+            height=self.frame_height
+        )
+        main_frame.left_frame = left_frame
 
-        right_frame = tkinter.Frame(main_frame)
+        right_frame = tkinter.Frame(
+            main_frame,
+            width=self.frame_width * (1 - self.left_right_ratio),
+            height=self.frame_height
+        )
 
         for k, item in enumerate(right_container_items):
             right_frame[k] = item
+
+        main_frame.right_frame = right_frame
 
     @staticmethod
     def raise_frame(frame):

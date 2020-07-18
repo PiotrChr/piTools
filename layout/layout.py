@@ -5,6 +5,7 @@ from time import sleep
 import cv2
 import settings
 
+from layout import view
 
 class ControlCenterGUI:
     BAR_BUTTON_HEIGHT = 2
@@ -26,15 +27,24 @@ class ControlCenterGUI:
             font_size=settings.LAYOUT_FONT_SIZE,
             font_family=settings.LAYOUT_FONT_FAMILY,
             font_size_big=settings.LAYOUT_BIG_FONT_SIZE,
-            font_size_small=settings.LAYOUT_SMALL_FONT_SIZE
+            font_size_small=settings.LAYOUT_SMALL_FONT_SIZE,
+            frame_width=settings.LAYOUT_FRAME_WIDTH,
+            frame_height=settings.LAYOUT_FRAME_HEIGHT,
+            left_right_ratio=settings.LAYOUT_FRAME_LEFT_RIGHT_RATIO
         )
 
         self.layout = self.get_layout()
 
-    # def getFrames
-    #     return [
-    #
-    #     ]
+        for Frame in self.get_frames():
+            self.layout[Frame.__name__] = Frame(self.layout)
+
+    def get_frames(self):
+        return [
+            view.homeFrame,
+            view.antFrame,
+            view.printerFrame,
+            view.statusFrame
+        ]
 
     def get_layout(self):
         layout = tkinter.Frame(self.master)
