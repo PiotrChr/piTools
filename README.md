@@ -2,6 +2,5 @@
 
 ###Todo:
 - Embed TkinterTemplating into mainFrame
-- Move Frames into Classes/ out of layout.py
 - Write utility class for getting crucial system data
- 
+- Add back button to each main frame

@@ -2,11 +2,12 @@ import tkinter
 
 
 class TkinterTemplating:
-    def __init__(self, switch_text_on=None, switch_text_off=None, button_width=None, button_height=None, font_size=None,
+    def __init__(self, switch_text_on=None, switch_text_off=None, button_text_back=None, button_width=None, button_height=None, font_size=None,
                  font_family=None, font_size_big=None, font_size_small=None, frame_height=None, frame_width=None,
                  left_right_ratio=None):
         self.switch_text_on = switch_text_on
         self.switch_text_off = switch_text_off
+        self.button_text_back = button_text_back
         self.button_width = button_width
         self.button_height = button_height
         self.font_size = font_size
@@ -45,36 +46,21 @@ class TkinterTemplating:
 
         return button_frame
 
-        # TODO: Here, Move to the main frame
-    def create_main_frame(self, container, right_container_items):
-        main_frame = tkinter.Frame(
-            container,
-            width=self.frame_width,
-            height=self.frame_height
-        )
-
-        left_frame = tkinter.Frame(
-            main_frame,
-            width=self.frame_width * self.left_right_ratio,
-            height=self.frame_height
-        )
-        main_frame.left_frame = left_frame
-
-        right_frame = tkinter.Frame(
-            main_frame,
-            width=self.frame_width * (1 - self.left_right_ratio),
-            height=self.frame_height
-        )
-
-        for k, item in enumerate(right_container_items):
-            right_frame[k] = item
-
-        main_frame.right_frame = right_frame
-
     def create_bar_button(self, container, title=None, action=None):
         button = tkinter.Button(
             container,
             text=title,
+            command=action,
+            width=self.button_width,
+            height=self.button_height
+        )
+
+        return button
+
+    def create_back_button(self, container, action):
+        button = tkinter.Button(
+            container,
+            text=self.button_text_back,
             command=action,
             width=self.button_width,
             height=self.button_height

@@ -3,52 +3,63 @@ from layout import view
 
 
 class AntFrame(view.mainFrame):
+    FRAME_LABEL = 'Ant Farm Control'
+    ANT_CAMERA_LABEL = 'Camera'
+    ANT_STREAM_LABEL = 'Stream'
+    ANT_LIGHTS_LABEL = 'Label'
+    ANT_THERMOSTAT_LABEL = 'Thermostat'
+
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
         self.right_frame = self.get_right_frame(self)
+        self.left_frame = self.get_left_frame(self)
 
     def get_right_frame(self, container):
-        ant_frame = tkinter.Frame(container)
+        right_frame = tkinter.Frame(container)
 
-        frame_label = self.templating.create_medium_label(ant_frame, text="Ant Control")
+        # Main Label
+        frame_label = self.templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
         frame_label.grid(row=0, columnspan=2, sticky='w')
-        ant_frame.frame_label = frame_label
+        right_frame.frame_label = frame_label
 
         # Camera
         camera_frame = self.templating.create_switch_button_frame(
-            ant_frame,
+            right_frame,
             self.start_ant_camera,
             self.stop_ant_camera,
-            'Camera'
+            self.ANT_CAMERA_LABEL
         )
-        ant_frame.camera_frame = camera_frame
+        right_frame.camera_frame = camera_frame
 
         # Stream
         stream_frame = self.templating.create_switch_button_frame(
-            ant_frame,
+            right_frame,
             self.start_ant_stream,
             self.stop_ant_stream,
-            'Stream'
+            self.ANT_STREAM_LABEL
         )
-        ant_frame.stream_frame = stream_frame
+        right_frame.stream_frame = stream_frame
 
         # Lights
         lights_frame = self.templating.create_switch_button_frame(
-            ant_frame,
+            right_frame,
             self.start_ant_lights,
             self.stop_ant_lights,
-            'Lights'
+            self.ANT_LIGHTS_LABEL
         )
-        ant_frame.lights_frame = lights_frame
+        right_frame.lights_frame = lights_frame
 
         # Thermostat
         thermostat_frame = self.templating.create_switch_button_frame(
-            ant_frame,
+            right_frame,
             self.start_ant_thermostat,
             self.start_ant_thermostat,
-            'Thermostat'
+            self.ANT_THERMOSTAT_LABEL
         )
-        ant_frame.thermostat_frame = thermostat_frame
+        right_frame.thermostat_frame = thermostat_frame
 
-        return ant_frame
+        return right_frame
+
+    def get_left_frame(self, container):
+        return 'asd'
