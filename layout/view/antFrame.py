@@ -12,6 +12,7 @@ class AntFrame(view.mainFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
+        self.controller = controller
         self.right_frame = self.get_right_frame(self)
         self.left_frame = self.get_left_frame(self)
 
@@ -26,8 +27,8 @@ class AntFrame(view.mainFrame):
         # Camera
         camera_frame = self.templating.create_switch_button_frame(
             right_frame,
-            self.start_ant_camera,
-            self.stop_ant_camera,
+            self.controller.start_ant_camera,
+            self.controller.stop_ant_camera,
             self.ANT_CAMERA_LABEL
         )
         right_frame.camera_frame = camera_frame
@@ -35,8 +36,8 @@ class AntFrame(view.mainFrame):
         # Stream
         stream_frame = self.templating.create_switch_button_frame(
             right_frame,
-            self.start_ant_stream,
-            self.stop_ant_stream,
+            self.controller.start_ant_stream,
+            self.controller.stop_ant_stream,
             self.ANT_STREAM_LABEL
         )
         right_frame.stream_frame = stream_frame
@@ -44,8 +45,8 @@ class AntFrame(view.mainFrame):
         # Lights
         lights_frame = self.templating.create_switch_button_frame(
             right_frame,
-            self.start_ant_lights,
-            self.stop_ant_lights,
+            self.controller.start_ant_lights,
+            self.controller.stop_ant_lights,
             self.ANT_LIGHTS_LABEL
         )
         right_frame.lights_frame = lights_frame
@@ -53,13 +54,11 @@ class AntFrame(view.mainFrame):
         # Thermostat
         thermostat_frame = self.templating.create_switch_button_frame(
             right_frame,
-            self.start_ant_thermostat,
-            self.start_ant_thermostat,
+            self.controller.start_ant_thermostat,
+            self.controller.start_ant_thermostat,
             self.ANT_THERMOSTAT_LABEL
         )
         right_frame.thermostat_frame = thermostat_frame
 
         return right_frame
 
-    def get_left_frame(self, container):
-        return 'asd'

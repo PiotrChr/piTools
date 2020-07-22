@@ -8,3 +8,12 @@ class MainFrame(tkinter.Frame):
 
         self.right_frame = None
         self.left_frame = None
+
+    @staticmethod
+    def get_left_frame(container):
+        left_frame = tkinter.Frame(container)
+
+        video_frame = tkinter.Frame(left_frame)
+        left_frame.video_frame = video_frame
+
+        return left_frame
