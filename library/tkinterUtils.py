@@ -28,21 +28,24 @@ class TkinterTemplating:
                                    label_off=None):
         button_frame = tkinter.Frame(container)
 
+        row = 0
         if label:
             button_label = self.create_small_label(button_frame, text=label)
-            button_label.grid(row=1, columnspan=2, sticky='w')
+            button_frame.button_label = button_label
+            button_label.grid(column=0, columnspan=2, row=row)
+            row = row+1
 
-        on_button = tkinter.Button(button_frame, text=label_on and self.switch_text_on, command=action_on,
-                                   width=self.button_width / 2,
+        on_button = tkinter.Button(button_frame, text=label_on or self.switch_text_on, command=action_on,
+                                   width=(self.button_width // 2) - 2,
                                    height=self.button_height)
-        on_button.grid(row=2, column=0, sticky='w')
+        on_button.grid(column=0, row=row)
         button_frame.on_button = on_button
 
-        off_button = tkinter.Button(container, text=label_off and self.switch_text_off, command=action_off,
-                                    width=self.button_width / 2,
+        off_button = tkinter.Button(button_frame, text=label_off or self.switch_text_off, command=action_off,
+                                    width=(self.button_width // 2) - 2,
                                     height=self.button_height)
-        off_button.grid(row=2, column=1)
-        button_frame.camera_stop_button = off_button
+        off_button.grid(column=1, row=row)
+        button_frame.off_button = off_button
 
         return button_frame
 
@@ -71,3 +74,23 @@ class TkinterTemplating:
     @staticmethod
     def raise_frame(frame):
         frame.tkraise()
+
+    def create_right_frame(self, container):
+        right_frame = tkinter.Frame(
+            container,
+            width=self.frame_width * (1-self.left_right_ratio),
+            height=self.frame_height,
+            bg='orange'
+        )
+
+        return right_frame
+
+    def create_left_frame(self, container):
+        left_frame = tkinter.Frame(
+            container,
+            width=self.frame_width * self.left_right_ratio,
+            height=self.frame_height,
+            bg='violet'
+        )
+
+        return left_frame

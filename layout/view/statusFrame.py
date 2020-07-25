@@ -1,9 +1,8 @@
-import tkinter
-from layout import view
+from layout.view import mainFrame
 from layout.templating import templating
 
 
-class StatusFrame(view.mainFrame):
+class StatusFrame(mainFrame.MainFrame):
     FRAME_LABEL = 'Status'
     QUIT_BUTTON_LABEL = 'Quit'
     RESTART_BUTTON_LABEL = 'Restart'
@@ -13,14 +12,15 @@ class StatusFrame(view.mainFrame):
         super().__init__(parent, controller)
 
         self.right_frame = self.get_right_frame(self)
-        self.left_frame = self.get_left_frame(self)
+        self.add_back_button()
+        self.pack_all()
 
     def get_right_frame(self, container):
-        right_frame = tkinter.Frame(container)
+        right_frame = templating.create_right_frame(container)
 
         # Main Label
-        frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
-        frame_label.grid(row=0, columnspan=2, sticky='w')
+        frame_label = templating.create_medium_label(right_frame, self.FRAME_LABEL)
+        frame_label.pack()
         right_frame.frame_label = frame_label
 
         # Quit
@@ -29,7 +29,7 @@ class StatusFrame(view.mainFrame):
             title=self.QUIT_BUTTON_LABEL,
             action=self.controller.quit
         )
-        quit_button.grid(row=0, column=1)
+        quit_button.pack()
         right_frame.quit_button = quit_button
 
         # Restart
@@ -38,7 +38,7 @@ class StatusFrame(view.mainFrame):
             title=self.RESTART_BUTTON_LABEL,
             action=self.controller.restart
         )
-        restart_button.grid(row=1, column=0)
+        restart_button.pack()
         right_frame.restart_button = restart_button
 
         # Halt
@@ -47,10 +47,7 @@ class StatusFrame(view.mainFrame):
             title=self.HALT_BUTTON_LABEL,
             action=self.controller.halt
         )
-        halt_button.grid(row=1, column=1)
+        halt_button.pack()
         right_frame.halt_button = halt_button
 
         return right_frame
-
-    def get_left_frame(self, container):
-        return 'asd'

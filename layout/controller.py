@@ -6,26 +6,29 @@ import settings
 
 
 class Controller:
-    def __init__(self, container, after, quitApp):
+    def __init__(self, container, after, quit_app):
         self.container = container
         self.stop_camera_signal = False
         self.after = after
-        self.quitApp = quitApp
+        self.quit_app = quit_app
 
-    def ant_frame(self):
+    def open_ant(self):
         templating.raise_frame(self.container.AntFrame)
 
-    def home_frame(self):
+    def open_home(self):
         templating.raise_frame(self.container.HomeFrame)
 
-    def printer_frame(self):
+    def open_printer(self):
         templating.raise_frame(self.container.PrinterFrame)
 
-    def status_frame(self):
+    def open_status(self):
         templating.raise_frame(self.container.StatusFrame)
 
     def back(self):
         templating.raise_frame(self.container.HomeFrame)
+
+    def open_printer_page(self):
+        sleep(0.5)
 
     @staticmethod
     def update_camera_frame(image, imagetk, camera_frame):
@@ -112,7 +115,7 @@ class Controller:
 
     def quit(self):
         self.stop_camera()
-        self.quitApp()
+        self.quit_app()
 
     def restart(self):
         sleep(1)
