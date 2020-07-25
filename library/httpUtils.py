@@ -1,6 +1,7 @@
 import socket
 
-def getHostIp():
+
+def get_host_ip():
     try:
         host_name = socket.gethostname()
         return socket.gethostbyname(host_name)
@@ -8,7 +9,7 @@ def getHostIp():
         print("Unable to get IP")
 
 
-def getHostName():
+def get_host_name():
     try:
         return socket.gethostname()
     except:
