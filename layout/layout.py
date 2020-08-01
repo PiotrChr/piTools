@@ -49,7 +49,7 @@ class Layout:
         templating.raise_frame(self['AntFrame'])
 
     def open_home(self):
-        print(self.__dict__)
+        # print(self.__dict__)
         templating.raise_frame(self['HomeFrame'])
 
     def open_printer(self):
@@ -66,10 +66,9 @@ class Layout:
 
     @staticmethod
     def update_camera_frame(image, imagetk, camera_frame):
-        camera_frame.cameraframe_label.currentImage = image
-        camera_frame.cameraframe_label.imgtk = imagetk
-        camera_frame.cameraframe_label.config(image=imagetk)  # show the image
-        camera_frame.cameraframe_label.config(image=imagetk)  # show the image
+        camera_frame.current_image = image
+        camera_frame.imgtk = imagetk
+        camera_frame.config(image=imagetk)  # show the image
 
     def start_capture(self, source):
         self.vs = cv2.VideoCapture(source)
@@ -93,7 +92,6 @@ class Layout:
             return
 
         ok, frame = self.vs.read()
-
         if ok:  # frame captured without any errors
             cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)  # convert colors from BGR to RGBA
             current_image = Image.fromarray(cv2image)  # convert image for PIL
@@ -130,33 +128,36 @@ class Layout:
         self.stop_camera()
 
     def start_ant_stream(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def stop_ant_stream(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def start_ant_lights(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def stop_ant_lights(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def start_ant_thermostat(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def stop_ant_thermostat(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def quit(self):
         self.stop_camera()
         self.master.quit()
 
     def restart(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def halt(self):
-        sleep(1)
+        self.not_yet_implemented()
 
     def mainloop(self):
         self.master.mainloop()
 
+    @staticmethod
+    def not_yet_implemented():
+        templating.infobox('Info', 'Not yet implemented')

@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import messagebox
 
 
 class TkinterTemplating:
@@ -18,13 +19,34 @@ class TkinterTemplating:
         self.frame_height = frame_height
         self.left_right_ratio = left_right_ratio
 
+        self.font_bold = font_family + ' ' + str(font_size) + ' ' + 'bold'
+
     def create_medium_label(self, container, text):
         return tkinter.Label(container, text=text, height=1, anchor='e', font=(self.font_family, self.font_size_big))
 
     def create_small_label(self, container, text):
         return tkinter.Label(container, text=text, height=1, font=(self.font_family, self.font_size))
 
-    def create_switch_button_frame(self, container, action_off, action_on, label=None, label_on=None,
+    def create_keyval_label(self, container, key, value, label=None):
+        keyval_frame = tkinter.Frame(container)
+
+        row = 0
+        if label:
+            keyval_label = tkinter.Label(keyval_frame, text=label)
+            keyval_label.grid(row=row, column=0, columnspan=2)
+            row = row+1
+
+        key_text = tkinter.Label(keyval_frame, width=20, font=self.font_bold, text=key, anchor="w")
+        key_text.grid(row=row, column=0, sticky=tkinter.W)
+        keyval_frame.key_text = key_text
+
+        value_text = tkinter.Label(keyval_frame, text=value, anchor="w")
+        value_text.grid(row=row, column=1, sticky=tkinter.E)
+        keyval_frame.value_text = value_text
+
+        return keyval_frame
+
+    def create_switch_button_frame(self, container, action_on, action_off, label=None, label_on=None,
                                    label_off=None):
         button_frame = tkinter.Frame(container)
 
@@ -80,7 +102,9 @@ class TkinterTemplating:
             container,
             width=self.frame_width * (1-self.left_right_ratio),
             height=self.frame_height,
-            bg='orange'
+            # bg='orange',
+            # borderwidth=1,
+            # relief="solid",
         )
 
         return right_frame
@@ -90,7 +114,11 @@ class TkinterTemplating:
             container,
             width=self.frame_width * self.left_right_ratio,
             height=self.frame_height,
-            bg='violet'
+            # bg='violet',
         )
 
         return left_frame
+
+    @staticmethod
+    def infobox(title, message):
+        messagebox.showinfo(title, message)

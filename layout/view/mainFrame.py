@@ -18,14 +18,19 @@ class MainFrame(tkinter.Frame):
         self.right_frame.pack_propagate(False)
 
         if hasattr(self.right_frame, 'back_button'):
-            self.right_frame.back_button.pack()
+            self.right_frame.back_button.pack(pady=(20, 0))
 
     @staticmethod
     def get_left_frame(container):
         left_frame = templating.create_left_frame(container)
 
-        video_frame = tkinter.Frame(left_frame)
+        video_frame = tkinter.Label(left_frame)
+        video_frame.config(image='')
         video_frame.pack()
+
+        video_frame.current_image = None
+        video_frame.imgtk = None
+
         left_frame.video_frame = video_frame
 
         return left_frame

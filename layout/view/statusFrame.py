@@ -1,5 +1,7 @@
 from layout.view import mainFrame
 from layout.templating import templating
+from library.sysUtils import SysUtils
+import tkinter
 
 
 class StatusFrame(mainFrame.MainFrame):
@@ -14,6 +16,26 @@ class StatusFrame(mainFrame.MainFrame):
         self.right_frame = self.get_right_frame(self)
         self.add_back_button()
         self.pack_all()
+
+    def get_left_frame(self, container):
+        left_frame = templating.create_left_frame(container)
+
+        status_section = tkinter.Frame(left_frame)
+        status_section.pack(expand=True)
+
+        # Host IP label
+        host_ip_label = templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
+        host_ip_label.pack(fill="x")
+        status_section.host_ip_label = host_ip_label
+
+        # Host Name label
+        host_name_label = templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
+        host_name_label.pack(fill="x")
+        status_section.host_name_label = host_name_label
+
+        left_frame.status_section = status_section
+
+        return left_frame
 
     def get_right_frame(self, container):
         right_frame = templating.create_right_frame(container)

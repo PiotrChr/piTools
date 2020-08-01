@@ -14,6 +14,16 @@ class HomeFrame(mainFrame.MainFrame):
         self.right_frame = self.get_right_frame(self)
         self.pack_all()
 
+    @staticmethod
+    def get_left_frame(container):
+        left_frame = templating.create_left_frame(container)
+
+        frame_label = templating.create_medium_label(left_frame, 'Welcome')
+        frame_label.pack(expand=True)
+        left_frame.frame_label = frame_label
+
+        return left_frame
+
     def get_right_frame(self, container):
         right_frame = templating.create_right_frame(container)
 
