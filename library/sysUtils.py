@@ -10,3 +10,15 @@ class SysUtils:
     @staticmethod
     def host_name():
         return utils.get_host_name()
+
+    @staticmethod
+    def host_device():
+        return utils.get_host_device()
+
+    @staticmethod
+    def uptime():
+        return utils.get_uptime()
+
+    @staticmethod
+    def host_up(host):
+        return utils.get_response_code(host) == 200

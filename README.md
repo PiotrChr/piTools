@@ -10,3 +10,7 @@
 [ ] Add home screen and basic status screen
 [ ] Release v1.0
 [ ] Create generic prompts for dangerous actions
+
+
+###Dependencies:
+- python3-netifaces

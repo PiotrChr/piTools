@@ -14,6 +14,7 @@ class StatusFrame(mainFrame.MainFrame):
         super().__init__(parent, controller)
 
         self.right_frame = self.get_right_frame(self)
+        self.add_refresh_button()
         self.add_back_button()
         self.pack_all()
 
@@ -22,6 +23,16 @@ class StatusFrame(mainFrame.MainFrame):
 
         status_section = tkinter.Frame(left_frame)
         status_section.pack(expand=True)
+
+        # Host Uptime label
+        host_uptime_label = templating.create_keyval_label(status_section, 'Host uptime: ', SysUtils.uptime())
+        host_uptime_label.pack(fill="x")
+        status_section.host_uptime_label = host_uptime_label
+
+        # Host Device label
+        host_dev_label = templating.create_keyval_label(status_section, 'Host Device: ', SysUtils.host_device())
+        host_dev_label.pack(fill="x")
+        status_section.host_dev_label = host_dev_label
 
         # Host IP label
         host_ip_label = templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
@@ -49,7 +60,8 @@ class StatusFrame(mainFrame.MainFrame):
         quit_button = templating.create_bar_button(
             right_frame,
             title=self.QUIT_BUTTON_LABEL,
-            action=self.controller.quit
+            action=self.controller.quit,
+            bg='yellow'
         )
         quit_button.pack()
         right_frame.quit_button = quit_button
@@ -58,7 +70,8 @@ class StatusFrame(mainFrame.MainFrame):
         restart_button = templating.create_bar_button(
             right_frame,
             title=self.RESTART_BUTTON_LABEL,
-            action=self.controller.restart
+            action=self.controller.restart,
+            bg='orange'
         )
         restart_button.pack()
         right_frame.restart_button = restart_button
@@ -67,9 +80,13 @@ class StatusFrame(mainFrame.MainFrame):
         halt_button = templating.create_bar_button(
             right_frame,
             title=self.HALT_BUTTON_LABEL,
-            action=self.controller.halt
+            action=self.controller.halt,
+            bg='red'
         )
         halt_button.pack()
         right_frame.halt_button = halt_button
 
         return right_frame
+
+    def refresh(self):
+        self.left_frame.status_section.host_uptime_label.value_text.config(text=SysUtils.uptime())
