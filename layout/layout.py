@@ -6,6 +6,7 @@ import cv2
 import settings
 from library.sysUtils import SysUtils
 
+
 class Layout:
     def __init__(self, title):
         self.data = {}
