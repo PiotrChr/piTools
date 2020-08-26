@@ -5,10 +5,10 @@ boot_mac: install_mac deps_mac start_mac
 boot_pi: install_pi deps_pi start_pi
 
 deps_pi:
-	pip install -r requirements-mac.txt
+	pip install -r requirements.txt
 
 deps_mac:
-	pip install -r requirements.txt
+	pip install -r requirements-mac.txt
 
 pip:
 	pip install $(i) && pip freeze | grep $(i) >> requirements.txt
