@@ -12,7 +12,6 @@ class ControlCenterGUI:
 
     def __init__(self):
         self.initialize_v4l2()
-
         parser = argparse.ArgumentParser()
         parser.add_argument("-m", "--mode", help="set mode (f or w)")
         args = parser.parse_args()
