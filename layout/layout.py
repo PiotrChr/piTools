@@ -5,7 +5,6 @@ from PIL import Image, ImageTk
 import cv2
 import settings
 from library.sysUtils import SysUtils
-from time import sleep
 
 
 class Layout:
@@ -119,12 +118,12 @@ class Layout:
 
     def start_printer_camera(self):
         try:
-            self.validate_host(settings.PRINTER_BASE_URL, settings.PRINTER_STREAM_URL)
+            SysUtils.validate_host(settings.PRINTER_BASE_URL, settings.PRINTER_STREAM_URL)
         except Exception as exception:
             templating.errorbox(message=str(exception))
             return
 
-        # self.start_camera(settings.PRINTER_STREAM_URL, printerFrame.PrinterFrame.__name__)
+        self.start_camera(settings.PRINTER_STREAM_URL, printerFrame.PrinterFrame.__name__)
 
     def stop_printer_camera(self):
         self.stop_camera()
@@ -146,14 +145,6 @@ class Layout:
 
     def stop_ant_thermostat(self):
         self.not_yet_implemented()
-
-    @staticmethod
-    def validate_host(host, url=None):
-        if not SysUtils.ping(host):
-            raise Exception("Host down")
-
-        if url and not SysUtils.host_up(url):
-            raise Exception("Host down")
 
     def quit(self):
         self.stop_camera()

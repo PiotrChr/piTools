@@ -1,6 +1,7 @@
 from layout.view import mainFrame
 from layout.templating import templating
 from library.sysUtils import SysUtils
+import settings
 import tkinter
 
 
@@ -43,6 +44,21 @@ class StatusFrame(mainFrame.MainFrame):
         host_name_label = templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
         host_name_label.pack(fill="x")
         status_section.host_name_label = host_name_label
+
+        printer_host_up = True
+        try:
+            SysUtils.validate_host(settings.PRINTER_BASE_URL, is_rasp=settings.IS_RASP)
+        except:
+            printer_host_up = False
+
+        # Printer Host Name label
+        printer_host_name_label = templating.create_keyval_label(
+            status_section,
+            'Printer Host Status: ',
+            settings.PRINTER_BASE_URL + (' is Up' if printer_host_up else ' is Down')
+        )
+        printer_host_name_label.pack(fill="x")
+        status_section.printer_host_name_label = printer_host_name_label
 
         left_frame.status_section = status_section
 

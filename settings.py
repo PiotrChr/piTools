@@ -1,4 +1,5 @@
 import platform
+import os
 
 PRINTER_BASE_URL = 'http://192.168.0.233'
 PRINTER_PAGE_URL = 'http://192.168.0.233'
@@ -24,6 +25,7 @@ DEBUG = True
 
 OS = platform.system()
 IS_OSX = platform.system() == 'Darwin'
+IS_RASP = os.uname()[4].startswith("arm")
 
 COLOR = {
     'lightgreen': '#b5ff8c',
