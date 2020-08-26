@@ -56,4 +56,5 @@ def get_host_name():
 
 
 def get_response_code(host):
-    return request.urlopen(host).getcode()
+    response = request.urlopen(host)
+    return response.getcode()

@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 import cv2
 import settings
 from library.sysUtils import SysUtils
+from time import sleep
 
 
 class Layout:
@@ -92,15 +93,17 @@ class Layout:
             imgtk = ImageTk.PhotoImage(image=current_image)  # convert image for tkinter
 
             self.update_camera_frame(current_image, imgtk, camera_frame)
+        else:
+            templating.errorbox('Stream error', 'Stream error, quitting')
+            self.stop_camera_signal = True
 
-        # self.master.after(100, self.video_loop(camera_frame))
+        self.master.after(100, lambda: self.video_loop(camera_frame))
 
     def start_camera(self, source, camera_frame):
         if hasattr(self, 'vs'):
             self.stop_camera()
 
         self.start_capture(source)
-
         self.video_loop(camera_frame)
 
     def stop_camera(self):
@@ -116,12 +119,12 @@ class Layout:
 
     def start_printer_camera(self):
         try:
-            self.validate_host(settings.PRINTER_STREAM_URL)
+            self.validate_host(settings.PRINTER_BASE_URL, settings.PRINTER_STREAM_URL)
         except Exception as exception:
             templating.errorbox(message=str(exception))
             return
 
-        self.start_camera(settings.PRINTER_STREAM_URL, printerFrame.PrinterFrame.__name__)
+        # self.start_camera(settings.PRINTER_STREAM_URL, printerFrame.PrinterFrame.__name__)
 
     def stop_printer_camera(self):
         self.stop_camera()
@@ -145,9 +148,11 @@ class Layout:
         self.not_yet_implemented()
 
     @staticmethod
-    def validate_host(host):
+    def validate_host(host, url=None):
+        if not SysUtils.ping(host):
+            raise Exception("Host down")
 
-        if not SysUtils.host_up(host):
+        if url and not SysUtils.host_up(url):
             raise Exception("Host down")
 
     def quit(self):

@@ -1,5 +1,5 @@
 from library import utils
-
+import os
 
 class SysUtils:
 
@@ -20,5 +20,10 @@ class SysUtils:
         return utils.get_uptime()
 
     @staticmethod
+    def ping(host):
+        return True if os.system("ping -c 1 " + host) is 0 else False
+
+    @staticmethod
     def host_up(host):
+        responsecode = utils.get_response_code(host)
         return utils.get_response_code(host) == 200
