@@ -1,4 +1,4 @@
-default: start_linux
+default: pip start_pi
 
 pip:
 	pip install $(i) && pip freeze | grep $(i) >> requirements.txt
