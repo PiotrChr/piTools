@@ -14,6 +14,7 @@ class ControlCenterGUI:
         self.initialize_v4l2()
         parser = argparse.ArgumentParser()
         parser.add_argument("-m", "--mode", help="set mode (f or w)")
+        parser.add_argument("-t", "--type", help="set type (f or w)")
         args = parser.parse_args()
 
         if settings.DEBUG:
@@ -22,8 +23,7 @@ class ControlCenterGUI:
 
         # Init
         self.layout = layout.Layout(self.APP_NAME)
-        self.set_mode(args.mode and args.mode == 'f' and True or False)
-        self.set_mode(False)
+        self.set_mode(args.mode and args.mode == 'f' and True or False, settings.resolution(args.type or 'small'))
 
     @staticmethod
     def initialize_v4l2():
@@ -33,11 +33,11 @@ class ControlCenterGUI:
             p = subprocess.Popen(rpistr, shell=True, preexec_fn=os.setsid)
             time.sleep(1)
 
-    def set_mode(self, full_screen):
+    def set_mode(self, full_screen, resolution=None):
         if full_screen:
             self.layout.set_fullscreen()
         else:
-            self.layout.set_windowed()
+            self.layout.set_windowed(resolution)
 
     def start(self):
         self.layout.mainloop()
