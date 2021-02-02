@@ -11,6 +11,9 @@ class MainFrame(tkinter.Frame):
         self.right_frame = None
         self.left_frame = self.get_left_frame(self)
 
+    def set(self, key, value):
+        self[key] = value
+
     def pack_all(self):
         self.left_frame.grid(column=0, row=0)
         self.left_frame.pack_propagate(False)

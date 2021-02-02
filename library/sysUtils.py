@@ -22,7 +22,7 @@ class SysUtils:
     @staticmethod
     def ping(host, is_rasp=True):
         timeout = 0.2 if is_rasp else 200
-        return True if os.system("ping -c 1 -W " + str(timeout) + " " + host.replace('http://', '')) is 0 else False
+        return True if os.system("ping -c 1 -W " + str(timeout) + " " + host.replace('http://', '')) == 0 else False
 
     @staticmethod
     def host_up(host):

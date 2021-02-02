@@ -1,4 +1,5 @@
-from tkinter import *
+import tkinter
+from layout.tkinter.frame import Frame
 from tkinter import messagebox
 
 
@@ -24,26 +25,26 @@ class TkinterTemplating:
         self.font_bold = font_family + ' ' + str(font_size) + ' ' + 'bold'
 
     def create_medium_label(self, container, text):
-        return Label(container, text=text, height=1, anchor='e', font=(self.font_family, self.font_size_big))
+        return tkinter.Label(container, text=text, height=1, anchor='e', font=(self.font_family, self.font_size_big))
 
     def create_small_label(self, container, text):
-        return Label(container, text=text, height=1, font=(self.font_family, self.font_size))
+        return tkinter.Label(container, text=text, height=1, font=(self.font_family, self.font_size))
 
     def create_keyval_label(self, container, key, value, label=None):
         keyval_frame = Frame(container)
 
         row = 0
         if label:
-            keyval_label = Label(keyval_frame, text=label)
+            keyval_label = tkinter.Label(keyval_frame, text=label)
             keyval_label.grid(row=row, column=0, columnspan=2)
             row = row + 1
 
-        key_text = Label(keyval_frame, width=20, font=self.font_bold, text=key, anchor="w")
-        key_text.grid(row=row, column=0, sticky=W)
+        key_text = tkinter.Label(keyval_frame, width=20, font=self.font_bold, text=key, anchor="w")
+        key_text.grid(row=row, column=0, sticky=tkinter.W)
         keyval_frame.key_text = key_text
 
-        value_text = Label(keyval_frame, text=value, anchor="w")
-        value_text.grid(row=row, column=1, sticky=E)
+        value_text = tkinter.Label(keyval_frame, text=value, anchor="w")
+        value_text.grid(row=row, column=1, sticky=tkinter.E)
         keyval_frame.value_text = value_text
 
         return keyval_frame
@@ -95,7 +96,7 @@ class TkinterTemplating:
 
     @staticmethod
     def create_button(container, text=None, command=None, width=None, height=None, bg=None, fg='black'):
-        button = Button(
+        button = tkinter.Button(
             container,
             text=text,
             command=command,
