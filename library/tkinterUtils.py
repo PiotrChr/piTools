@@ -118,6 +118,38 @@ class TkinterTemplating:
     def create_refresh_button(self, container, action):
         return self.create_bar_button(container, self.button_text_refresh, action, bg=self.color['lightgreen'])
 
+    def create_slider(self, container, from_=None, to=None, horizontal=True, command=None):
+        slider = Scale(
+            container,
+            from_=from_,
+            to=to,
+            length=self.button_width,
+            orient=HORIZONTAL if horizontal else VERTICAL,
+            command=command
+        )
+
+        return slider
+
+    def create_slider_label(self, container, title=None, description=None, command=None, from_=None, to=None):
+        slider_frame = Frame(container)
+
+        slider_label = self.create_medium_label(slider_frame, title)
+        slider_frame.slider_label = slider_label
+
+        slider_description = self.create_small_label(slider_frame, description)
+        slider_frame.slider_description = slider_description
+
+        slider = self.create_slider(slider_frame, from_=from_, to=to, command=command)
+        slider_frame.slider = slider
+
+        slider_description.pack()
+        slider_label.pack()
+        slider.pack()
+        return slider_frame
+
+    def create_simple_slider_label(self, container, title=None, description=None, command=None):
+        return self.create_slider_label(container, title, description, from_=0, to=100, command=command)
+
     @staticmethod
     def raise_frame(frame):
         frame.tkraise()
@@ -131,7 +163,7 @@ class TkinterTemplating:
             # borderwidth=1,
             # relief="solid",
         )
-
+h
         return right_frame
 
     def create_left_frame(self, container):

@@ -11,7 +11,8 @@
 - [x] Release v1.0
 
 ###Todo:
-
+- [] Create tkinter rail controls
+ 
 
 ###Dependencies:
 - python3-netifaces

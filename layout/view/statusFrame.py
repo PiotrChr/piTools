@@ -26,24 +26,20 @@ class StatusFrame(mainFrame.MainFrame):
         status_section.pack(expand=True)
 
         # Host Uptime label
-        host_uptime_label = templating.create_keyval_label(status_section, 'Host uptime: ', SysUtils.uptime())
-        host_uptime_label.pack(fill="x")
-        status_section.host_uptime_label = host_uptime_label
+        status_section.host_uptime_label = templating.create_keyval_label(status_section, 'Host uptime: ', SysUtils.uptime())
+        status_section.host_uptime_label.pack(fill="x")
 
         # Host Device label
-        host_dev_label = templating.create_keyval_label(status_section, 'Host Device: ', SysUtils.host_device())
-        host_dev_label.pack(fill="x")
-        status_section.host_dev_label = host_dev_label
+        status_section.host_dev_label = templating.create_keyval_label(status_section, 'Host Device: ', SysUtils.host_device())
+        status_section.host_dev_label.pack(fill="x")
 
         # Host IP label
-        host_ip_label = templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
-        host_ip_label.pack(fill="x")
-        status_section.host_ip_label = host_ip_label
+        status_section.host_ip_label = templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
+        status_section.host_ip_label.pack(fill="x")
 
         # Host Name label
-        host_name_label = templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
-        host_name_label.pack(fill="x")
-        status_section.host_name_label = host_name_label
+        status_section.host_name_label = templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
+        status_section.host_name_label.pack(fill="x")
 
         printer_host_up = True
         try:
@@ -52,13 +48,20 @@ class StatusFrame(mainFrame.MainFrame):
             printer_host_up = False
 
         # Printer Host Name label
-        printer_host_name_label = templating.create_keyval_label(
+        status_section.printer_host_name_label = templating.create_keyval_label(
             status_section,
             'Printer Host Status: ',
             settings.PRINTER_BASE_URL + (' is Up' if printer_host_up else ' is Down')
         )
-        printer_host_name_label.pack(fill="x")
-        status_section.printer_host_name_label = printer_host_name_label
+        status_section.printer_host_name_label.pack(fill="x")
+
+        # Front Door Host Name label
+        status_section.front_door_host_name_label = templating.create_keyval_label(
+            status_section,
+            'Front Door Host Status: ',
+            settings.FRONT_DOOR_BASE_URL + (' is Up' if printer_host_up else ' is Down')
+        )
+        status_section.front_door_host_name_label.pack(fill="x")
 
         left_frame.status_section = status_section
 

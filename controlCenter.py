@@ -27,8 +27,7 @@ class ControlCenterGUI:
 
     @staticmethod
     def initialize_v4l2():
-        # Start on arm only
-        if os.uname()[4].startswith("arm") and not os.path.exists('/dev/video0'):
+        if settings.IS_RASP and not os.path.exists('/dev/video0'):
             rpistr = "sudo modprobe bcm2835-v4l2"
             p = subprocess.Popen(rpistr, shell=True, preexec_fn=os.setsid)
             time.sleep(1)
