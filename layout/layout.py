@@ -4,7 +4,9 @@ from layout.templating import templating
 from PIL import Image, ImageTk
 import cv2
 import settings
+from infrastructure.http.client import Client
 from library.sysUtils import SysUtils
+import os
 
 
 class Layout:
@@ -16,6 +18,7 @@ class Layout:
 
         self.layout = tkinter.Frame()
         self.layout.pack()
+        self.http_client = Client()
 
         for Frame in self.get_frames():
             self[Frame.__name__] = Frame(self.layout, self)
@@ -73,10 +76,15 @@ class Layout:
         self.not_yet_implemented()
 
     def start_door_camera(self):
-        self.not_yet_implemented()
+        self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_STREAM_START_PATH)
+        self.start_camera(
+            settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_STREAM_PATH,
+            frontDoorFrame.FrontDoorFrame.__name__
+        )
 
     def stop_door_camera(self):
-        self.not_yet_implemented()
+        self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_STREAM_STOP_PATH)
+        self.stop_camera()
 
     def stop_door_record(self):
         self.not_yet_implemented()
@@ -176,12 +184,16 @@ class Layout:
         self.stop_camera()
         self.master.quit()
 
-    def restart(self):
-        self.not_yet_implemented()
+    @staticmethod
+    def restart():
+        if templating.promptbox(None, 'Are you sure?'):
+            os.system('reboot')
 
-    def halt(self):
-        self.not_yet_implemented()
-
+    @staticmethod
+    def halt():
+        if templating.promptbox(None, 'Are you sure?'):
+            os.system('halt')
+        
     def mainloop(self):
         self.master.mainloop()
 

@@ -164,7 +164,7 @@ class TkinterTemplating:
             # borderwidth=1,
             # relief="solid",
         )
-h
+
         return right_frame
 
     def create_left_frame(self, container):
@@ -176,6 +176,10 @@ h
         )
 
         return left_frame
+
+    @staticmethod
+    def promptbox(title="Prompt", message=None):
+        return messagebox.askokcancel(title, message)
 
     @staticmethod
     def infobox(title="Info", message=None):

@@ -6,7 +6,7 @@ PRINTER_PAGE_URL = 'http://192.168.0.233'
 PRINTER_STREAM_URL = 'http://192.168.0.233/webcam/?action=stream'
 
 FRONT_DOOR_BASE_URL = 'http://192.168.0.233'
-FRONT_DOOR_STREAM_PATH_PATH = '/video_feed'
+FRONT_DOOR_STREAM_PATH = '/video_feed'
 FRONT_DOOR_STREAM_START_PATH = '/feed_start'
 FRONT_DOOR_STREAM_STOP_PATH = '/feed_stop'
 FRONT_DOOR_STREAM_STATUS_PATH = '/feed_status'

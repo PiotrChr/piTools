@@ -19,9 +19,8 @@ class FrontDoorFrame(mainFrame.MainFrame):
         right_frame = templating.create_right_frame(container)
 
         # Main Label
-        frame_label = templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
-        frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.frame_label = templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
+        right_frame.frame_label.pack()
 
         # Camera
         right_frame.camera_button = templating.create_switch_button_frame(
