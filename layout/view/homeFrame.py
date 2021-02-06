@@ -1,5 +1,6 @@
 from layout.view import mainFrame
 from layout.templating import templating
+from layout.menu.menu import menu
 
 
 class HomeFrame(mainFrame.MainFrame):
@@ -32,31 +33,13 @@ class HomeFrame(mainFrame.MainFrame):
         frame_label.pack()
         right_frame.frame_label = frame_label
 
-        # Status
-        status_button = templating.create_bar_button(
-            right_frame,
-            self.STATUS_BUTTON_LABEL,
-            self.controller.open_status
-        )
-        status_button.pack()
-        right_frame.status_button = status_button
-
-        # Ants
-        ant_button = templating.create_bar_button(
-            right_frame,
-            self.ANT_BUTTON_LABEL,
-            self.controller.open_ant
-        )
-        ant_button.pack()
-        right_frame.ant_button = ant_button
-
-        # Printer
-        printer_button = templating.create_bar_button(
-            right_frame,
-            self.PRINTER_BUTTON_LABEL,
-            self.controller.open_printer
-        )
-        printer_button.pack()
-        right_frame.printer_button = printer_button
+        # Menu
+        for menuItem in menu:
+            right_frame[menuItem.id + "_button"] = templating.create_bar_button(
+                right_frame,
+                menuItem.title,
+                getattr(self.controller, menuItem.action)
+            )
+            right_frame[menuItem.id + "_button"].pack()
 
         return right_frame

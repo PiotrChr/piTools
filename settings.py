@@ -25,6 +25,20 @@ LAYOUT_BIG_FONT_SIZE = 12
 LAYOUT_SMALL_FONT_SIZE = 8
 LAYOUT_FONT_FAMILY = 'Helvetica'
 LAYOUT_LABEL_HEIGHT = 1
+DIMENSIONS = {
+    'small': {
+        'width': 800,
+        'height': 480
+    },
+    'square': {
+        'width': 1280,
+        'height': 1024
+    },
+    'other': {
+        'width': 1280,
+        'height': 768
+    }
+}
 LAYOUT_FRAME_WIDTH = 800
 LAYOUT_FRAME_HEIGHT = 500
 LAYOUT_FRAME_LEFT_RIGHT_RATIO = 0.72
@@ -38,3 +52,25 @@ COLOR = {
     'lightgreen': '#b5ff8c',
     'lightred': '#ff8c8c'
 }
+
+MENU = {
+    'status': {
+        'title': 'Status'
+    },
+    'frontDoor': {
+        'title': 'Front door'
+    },
+    'ants': {
+        'title': 'Ants'
+    },
+    '3dprinter': {
+        'title': '3D Printer'
+    },
+    'security': {
+        'title': 'Security'
+    }
+}
+
+
+def resolution(restype):
+    return str(DIMENSIONS[restype]['width']) + 'x' + str(DIMENSIONS[restype]['height'])

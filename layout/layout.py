@@ -1,5 +1,5 @@
 import tkinter
-from layout.view import antFrame, homeFrame, printerFrame, statusFrame
+from layout.view import antFrame, homeFrame, printerFrame, statusFrame, frontDoorFrame, securityFrame
 from layout.templating import templating
 from PIL import Image, ImageTk
 import cv2
@@ -33,13 +33,15 @@ class Layout:
     def get_frames():
         return [
             homeFrame.HomeFrame,
+            frontDoorFrame.FrontDoorFrame,
             antFrame.AntFrame,
             printerFrame.PrinterFrame,
-            statusFrame.StatusFrame
+            statusFrame.StatusFrame,
+            securityFrame.SecurityFrame
         ]
 
-    def set_windowed(self):
-        self.master.geometry('800x480')
+    def set_windowed(self, resolution='800x480'):
+        self.master.geometry(resolution)
 
     def set_fullscreen(self):
         self.master.overrideredirect(False)
@@ -52,16 +54,40 @@ class Layout:
         # print(self.__dict__)
         templating.raise_frame(self[homeFrame.HomeFrame.__name__])
 
+    def open_front_door(self):
+        templating.raise_frame(self[frontDoorFrame.FrontDoorFrame.__name__])
+
     def open_printer(self):
         templating.raise_frame(self[printerFrame.PrinterFrame.__name__])
 
     def open_status(self):
         templating.raise_frame(self[statusFrame.StatusFrame.__name__])
 
+    def open_security(self):
+        templating.raise_frame(self[securityFrame.SecurityFrame.__name__])
+
     def back(self):
         templating.raise_frame(self[homeFrame.HomeFrame.__name__])
 
     def open_printer_page(self):
+        self.not_yet_implemented()
+
+    def start_door_camera(self):
+        self.not_yet_implemented()
+
+    def stop_door_camera(self):
+        self.not_yet_implemented()
+
+    def stop_door_record(self):
+        self.not_yet_implemented()
+
+    def start_door_record(self):
+        self.not_yet_implemented()
+
+    def start_door_listen(self):
+        self.not_yet_implemented()
+
+    def stop_door_listen(self):
         self.not_yet_implemented()
 
     def update_camera_frame(self, image, imagetk, camera_frame):
