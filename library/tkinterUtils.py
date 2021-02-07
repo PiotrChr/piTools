@@ -120,12 +120,12 @@ class TkinterTemplating:
         return self.create_bar_button(container, self.button_text_refresh, action, bg=self.color['lightgreen'])
 
     def create_slider(self, container, from_=None, to=None, horizontal=True, command=None):
-        slider = Scale(
+        slider = tkinter.Scale(
             container,
             from_=from_,
             to=to,
             length=self.button_width,
-            orient=HORIZONTAL if horizontal else VERTICAL,
+            orient=tkinter.HORIZONTAL if horizontal else VERTICAL,
             command=command
         )
 

@@ -17,13 +17,23 @@ class ControlCenterGUI:
         parser.add_argument("-t", "--type", help="set type (f or w)")
         args = parser.parse_args()
 
+        res_type = args.type or 'small'
+
         if settings.DEBUG:
             import sys
             print(sys.modules.keys())
 
         # Init
-        self.layout = layout.Layout(self.APP_NAME)
-        self.set_mode(args.mode and args.mode == 'f' and True or False, settings.resolution(args.type or 'small'))
+        self.layout = layout.Layout(
+            self.APP_NAME,
+            settings.DIMENSIONS[res_type]['width'],
+            settings.DIMENSIONS[res_type]['height']
+        )
+
+        self.set_mode(
+            args.mode and args.mode == 'f' and True or False,
+            settings.resolution(res_type)
+        )
 
     @staticmethod
     def initialize_v4l2():
