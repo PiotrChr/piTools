@@ -4,8 +4,8 @@ import settings
 
 
 class FrontDoorController(Controller):
-    def __init__(self, templating):
-        super().__init__(templating)
+    def __init__(self, layout):
+        super().__init__(layout)
 
     def start_door_camera(self):
         self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_STREAM_START_PATH)

@@ -125,7 +125,7 @@ class TkinterTemplating:
             from_=from_,
             to=to,
             length=self.button_width,
-            orient=tkinter.HORIZONTAL if horizontal else VERTICAL,
+            orient=tkinter.HORIZONTAL if horizontal else tkinter.VERTICAL,
             command=command
         )
 

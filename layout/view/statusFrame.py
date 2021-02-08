@@ -1,5 +1,4 @@
 from layout.view import mainFrame
-from layout.templating import templating
 from library.sysUtils import SysUtils
 import settings
 import tkinter
@@ -11,8 +10,8 @@ class StatusFrame(mainFrame.MainFrame):
     RESTART_BUTTON_LABEL = 'Restart'
     HALT_BUTTON_LABEL = 'Halt'
 
-    def __init__(self, parent, controller):
-        super().__init__(parent, controller)
+    def __init__(self, parent, controller, templating):
+        super().__init__(parent, controller, templating)
 
         self.right_frame = self.get_right_frame(self)
         self.add_refresh_button()
@@ -20,25 +19,25 @@ class StatusFrame(mainFrame.MainFrame):
         self.pack_all()
 
     def get_left_frame(self, container):
-        left_frame = templating.create_left_frame(container)
+        left_frame = self.templating.create_left_frame(container)
 
         status_section = tkinter.Frame(left_frame)
         status_section.pack(expand=True)
 
         # Host Uptime label
-        status_section.host_uptime_label = templating.create_keyval_label(status_section, 'Host uptime: ', SysUtils.uptime())
+        status_section.host_uptime_label = self.templating.create_keyval_label(status_section, 'Host uptime: ', SysUtils.uptime())
         status_section.host_uptime_label.pack(fill="x")
 
         # Host Device label
-        status_section.host_dev_label = templating.create_keyval_label(status_section, 'Host Device: ', SysUtils.host_device())
+        status_section.host_dev_label = self.templating.create_keyval_label(status_section, 'Host Device: ', SysUtils.host_device())
         status_section.host_dev_label.pack(fill="x")
 
         # Host IP label
-        status_section.host_ip_label = templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
+        status_section.host_ip_label = self.templating.create_keyval_label(status_section, 'Host IP: ', SysUtils.host_ip())
         status_section.host_ip_label.pack(fill="x")
 
         # Host Name label
-        status_section.host_name_label = templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
+        status_section.host_name_label = self.templating.create_keyval_label(status_section, 'Host Name: ', SysUtils.host_name())
         status_section.host_name_label.pack(fill="x")
 
         printer_host_up = True
@@ -48,7 +47,7 @@ class StatusFrame(mainFrame.MainFrame):
             printer_host_up = False
 
         # Printer Host Name label
-        status_section.printer_host_name_label = templating.create_keyval_label(
+        status_section.printer_host_name_label = self.templating.create_keyval_label(
             status_section,
             'Printer Host Status: ',
             settings.PRINTER_BASE_URL + (' is Up' if printer_host_up else ' is Down')
@@ -56,7 +55,7 @@ class StatusFrame(mainFrame.MainFrame):
         status_section.printer_host_name_label.pack(fill="x")
 
         # Front Door Host Name label
-        status_section.front_door_host_name_label = templating.create_keyval_label(
+        status_section.front_door_host_name_label = self.templating.create_keyval_label(
             status_section,
             'Front Door Host Status: ',
             settings.FRONT_DOOR_BASE_URL + (' is Up' if printer_host_up else ' is Down')
@@ -68,42 +67,38 @@ class StatusFrame(mainFrame.MainFrame):
         return left_frame
 
     def get_right_frame(self, container):
-        right_frame = templating.create_right_frame(container)
+        right_frame = self.templating.create_right_frame(container)
 
         # Main Label
-        frame_label = templating.create_medium_label(right_frame, self.FRAME_LABEL)
-        frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
+        right_frame.frame_label.pack()
 
         # Quit
-        quit_button = templating.create_bar_button(
+        right_frame.quit_button = self.templating.create_bar_button(
             right_frame,
             title=self.QUIT_BUTTON_LABEL,
             action=self.controller.quit,
             bg='yellow'
         )
-        quit_button.pack()
-        right_frame.quit_button = quit_button
+        right_frame.quit_button.pack()
 
         # Restart
-        restart_button = templating.create_bar_button(
+        right_frame.restart_button = self.templating.create_bar_button(
             right_frame,
             title=self.RESTART_BUTTON_LABEL,
             action=self.controller.restart,
             bg='orange'
         )
-        restart_button.pack()
-        right_frame.restart_button = restart_button
+        right_frame.restart_button.pack()
 
         # Halt
-        halt_button = templating.create_bar_button(
+        right_frame.halt_button = self.templating.create_bar_button(
             right_frame,
             title=self.HALT_BUTTON_LABEL,
             action=self.controller.halt,
             bg='red'
         )
-        halt_button.pack()
-        right_frame.halt_button = halt_button
+        right_frame.halt_button.pack()
 
         return right_frame
 

@@ -5,8 +5,8 @@ import settings
 
 
 class PrinterController(Controller):
-    def __init__(self, templating, layout):
-        super().__init__(templating, layout)
+    def __init__(self, layout):
+        super().__init__(layout)
 
     def start_printer_camera(self):
         try:

@@ -6,11 +6,14 @@ import cv2
 
 
 class Controller:
-    def __init__(self, templating, layout):
+    def __init__(self, layout):
         self.stop_camera_signal = False
-        self.templating = templating
+        self.templating = None
         self.layout = layout
         self.http_client = Client()
+
+    def set_templating(self, templating):
+        self.templating = templating
 
     def open_frame(self, frame):
         self.templating.raise_frame(frame)
@@ -20,7 +23,7 @@ class Controller:
             self.stop_camera()
 
         self.start_capture(source)
-        self.video_loop(camera_frame)
+        self.video_loop(camera_frame, self.update_camera_frame)
 
     def stop_camera(self):
         self.stop_camera_signal = True
@@ -73,3 +76,8 @@ class Controller:
 
     def back(self):
         self.templating.raise_frame(self.layout[HomeFrame.__name__])
+
+    def update_camera_frame(self, image, imagetk, camera_frame):
+        self.layout[camera_frame].left_frame.video_frame.current_image = image
+        self.layout[camera_frame].left_frame.video_frame.imgtk = imagetk
+        self.layout[camera_frame].left_frame.video_frame.config(image=imagetk)  # show the image
