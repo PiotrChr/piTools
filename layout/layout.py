@@ -1,31 +1,36 @@
 import tkinter
-from layout.view import antFrame, homeFrame, printerFrame, statusFrame, frontDoorFrame, securityFrame
-from infrastructure.controller import antController, frontDoorController, homeController, printerController
+from layout.view import antFrame, homeFrame, printerFrame, statusFrame, frontDoorFrame, securityFrame, utilsFrame
+from infrastructure.controller import antController, frontDoorController, homeController, printerController, statusController, securityController, utilsController
 from layout.templating import create_templating
+from layout.tkinter import frame
 
 
-class Layout:
+class Layout(frame.Frame):
     def __init__(self, title, width, height):
-        self.data = {}
         self.master = tkinter.Tk()
+        super().__init__(self.master)
         self.master.title(title)
         self.width = width
         self.height = height
         self.templating = create_templating(width, height)
-        self.layout = tkinter.Frame()
-        self.layout.pack()
 
-        for frame in self.get_frames():
-            self[frame[0].__name__] = frame[0](self.layout, frame[1], self.templating)
-            self[frame.__name__].grid(row=0, column=0, sticky="nsew")
+        for home_frame in self.get_frames():
+            name = frame.Frame.create_name(home_frame[0].__name__)
+            self[name] = home_frame[0](self, home_frame[1], self.templating)
+            self[name].grid(row=0, column=0, sticky="nsew")
 
+        self.utils_frame = self.get_utils_frame()
+        self.utils_frame.grid(row=1, column=0, columnspan=2)
+
+        self.pack()
         self.open_home()
 
-    def __setitem__(self, key, value):
-        self.data[key] = value
-
-    def __getitem__(self, item):
-        return self.data[item]
+    def get_utils_frame(self):
+        return utilsFrame.UtilsFrame(
+            self,
+            utilsController.UtilsController,
+            self.templating
+        )
 
     @staticmethod
     def get_frames():
@@ -34,8 +39,8 @@ class Layout:
             [frontDoorFrame.FrontDoorFrame, frontDoorController.FrontDoorController],
             [antFrame.AntFrame, antController.AntController],
             [printerFrame.PrinterFrame, printerController.PrinterController],
-            [statusFrame.StatusFrame, homeController.HomeController],
-            [securityFrame.SecurityFrame, homeController.HomeController]
+            [statusFrame.StatusFrame, statusController.StatusController],
+            [securityFrame.SecurityFrame, securityController.SecurityController]
         ]
 
     def set_windowed(self, resolution='800x480'):
@@ -49,6 +54,6 @@ class Layout:
         # print(self.__dict__)
         self.templating.raise_frame(self[homeFrame.HomeFrame.__name__])
 
-    def mainloop(self):
+    def start_mainloop(self):
         self.master.mainloop()
 

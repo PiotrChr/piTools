@@ -7,7 +7,7 @@ class TkinterTemplating:
     def __init__(self, switch_text_on=None, switch_text_off=None, button_text_back=None, button_text_refresh=None,
                  button_width=None, button_height=None, font_size=None,
                  font_family=None, font_size_big=None, font_size_small=None, frame_height=None, frame_width=None,
-                 left_right_ratio=None, color=None):
+                 left_right_ratio=None, color=None, utils_frame_height=None):
         self.switch_text_on = switch_text_on
         self.switch_text_off = switch_text_off
         self.button_text_back = button_text_back
@@ -20,6 +20,7 @@ class TkinterTemplating:
         self.font_family = font_family
         self.frame_width = frame_width
         self.frame_height = frame_height
+        self.utils_frame_height = utils_frame_height
         self.left_right_ratio = left_right_ratio
         self.color = color
         self.font_bold = font_family + ' ' + str(font_size) + ' ' + 'bold'
@@ -155,11 +156,19 @@ class TkinterTemplating:
     def raise_frame(frame):
         frame.tkraise()
 
+    def create_utils_section(self, container):
+        utils_section = Frame(container)
+
+        return utils_section
+
+    def get_inner_frame_height(self):
+        return self.frame_height - self.utils_frame_height
+
     def create_right_frame(self, container):
         right_frame = Frame(
             container,
             width=self.frame_width * (1 - self.left_right_ratio),
-            height=self.frame_height,
+            height=self.get_inner_frame_height(),
             # bg='orange',
             # borderwidth=1,
             # relief="solid",
@@ -171,11 +180,21 @@ class TkinterTemplating:
         left_frame = Frame(
             container,
             width=self.frame_width * self.left_right_ratio,
-            height=self.frame_height,
+            height=self.get_inner_frame_height(),
             # bg='violet',
         )
 
         return left_frame
+
+    def create_utils_frame(self, container):
+        utils_frame = Frame(
+            container,
+            width=self.frame_width,
+            height=self.frame_height,
+            bg='violet',
+        )
+
+        return utils_frame
 
     @staticmethod
     def promptbox(title="Prompt", message=None):

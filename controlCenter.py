@@ -49,7 +49,7 @@ class ControlCenterGUI:
             self.layout.set_windowed(resolution)
 
     def start(self):
-        self.layout.mainloop()
+        self.layout.start_mainloop()
 
 
 app = ControlCenterGUI()

@@ -1,5 +1,6 @@
 from layout.view import mainFrame
 from layout.menu.menu import menu
+from layout.tkinter.frame import Frame
 
 
 class HomeFrame(mainFrame.MainFrame):
@@ -33,11 +34,12 @@ class HomeFrame(mainFrame.MainFrame):
 
         # Menu
         for menuItem in menu:
-            right_frame[menuItem.id + "_button"] = self.templating.create_bar_button(
+            name = Frame.create_name(menuItem.id + "_button")
+            right_frame[name] = self.templating.create_bar_button(
                 right_frame,
                 menuItem.title,
                 getattr(self.controller, menuItem.action)
             )
-            right_frame[menuItem.id + "_button"].pack()
+            right_frame[name].pack()
 
         return right_frame

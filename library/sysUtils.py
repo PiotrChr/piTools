@@ -35,3 +35,7 @@ class SysUtils:
 
         if url and not SysUtils.host_up(url):
             raise Exception("Host down")
+
+    @staticmethod
+    def run_screen_keyboard():
+        os.system("matchbox-keyboard")

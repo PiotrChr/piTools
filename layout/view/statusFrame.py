@@ -16,6 +16,7 @@ class StatusFrame(mainFrame.MainFrame):
         self.right_frame = self.get_right_frame(self)
         self.add_refresh_button()
         self.add_back_button()
+        self.bind_events()
         self.pack_all()
 
     def get_left_frame(self, container):
@@ -41,10 +42,7 @@ class StatusFrame(mainFrame.MainFrame):
         status_section.host_name_label.pack(fill="x")
 
         printer_host_up = True
-        try:
-            SysUtils.validate_host(settings.PRINTER_BASE_URL, is_rasp=settings.IS_RASP)
-        except:
-            printer_host_up = False
+        front_door_host_up = True
 
         # Printer Host Name label
         status_section.printer_host_name_label = self.templating.create_keyval_label(
@@ -58,7 +56,7 @@ class StatusFrame(mainFrame.MainFrame):
         status_section.front_door_host_name_label = self.templating.create_keyval_label(
             status_section,
             'Front Door Host Status: ',
-            settings.FRONT_DOOR_BASE_URL + (' is Up' if printer_host_up else ' is Down')
+            settings.FRONT_DOOR_BASE_URL + (' is Up' if front_door_host_up else ' is Down')
         )
         status_section.front_door_host_name_label.pack(fill="x")
 
@@ -102,5 +100,34 @@ class StatusFrame(mainFrame.MainFrame):
 
         return right_frame
 
-    def refresh(self):
-        self.left_frame.status_section.host_uptime_label.value_text.config(text=SysUtils.uptime())
+    def bind_events(self):
+        self.bind('<Enter>', self.refresh)
+
+    def refresh(self, event=None):
+        printer_host_up = True
+        front_door_host_up = True
+
+        self.left_frame.status_section.host_uptime_label.value_text.config(
+            text=SysUtils.uptime()
+        )
+
+        try:
+            SysUtils.validate_host(settings.PRINTER_BASE_URL, is_rasp=settings.IS_RASP)
+        except:
+            printer_host_up = False
+
+        try:
+            SysUtils.validate_host(settings.FRONT_DOOR_BASE_URL, is_rasp=settings.IS_RASP)
+        except:
+            front_door_host_up = False
+
+        self.left_frame.status_section.printer_host_name_label.value_text.config(
+            text=settings.PRINTER_BASE_URL + (' is Up' if printer_host_up else ' is Down')
+        )
+        self.left_frame.status_section.front_door_host_name_label.value_text.config(
+            text=settings.FRONT_DOOR_BASE_URL + (' is Up' if front_door_host_up else ' is Down')
+        )
+
+    def add_refresh_button(self):
+        refresh_button = self.templating.create_refresh_button(self.right_frame, self.refresh)
+        self.right_frame.refresh_button = refresh_button

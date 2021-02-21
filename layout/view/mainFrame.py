@@ -1,19 +1,17 @@
 import tkinter
+from layout.tkinter import frame
 
 
-class MainFrame(tkinter.Frame):
+class MainFrame(frame.Frame):
     def __init__(self, parent, controller, templating):
         tkinter.Frame.__init__(self, parent)
         self.parent = parent
-        self.controller = controller(parent)
+        self.controller = controller(layout=parent)
         self.templating = templating
 
         self.right_frame = None
         self.controller.set_templating(templating)
         self.left_frame = self.get_left_frame(self)
-
-    def set(self, key, value):
-        self[key] = value
 
     def pack_all(self):
         self.left_frame.grid(column=0, row=0)
@@ -28,7 +26,10 @@ class MainFrame(tkinter.Frame):
         if hasattr(self.right_frame, 'back_button'):
             self.right_frame.back_button.pack(pady=(20, 0))
 
-    def refresh(self):
+    def bind_events(self):
+        pass
+
+    def register_event_handlers(self):
         pass
 
     def get_left_frame(self, container):
@@ -46,9 +47,4 @@ class MainFrame(tkinter.Frame):
         return left_frame
 
     def add_back_button(self):
-        back_button = self.templating.create_back_button(self.right_frame, self.controller.back)
-        self.right_frame.back_button = back_button
-
-    def add_refresh_button(self):
-        refresh_button = self.templating.create_refresh_button(self.right_frame, self.refresh)
-        self.right_frame.refresh_button = refresh_button
+        self.right_frame.back_button = self.templating.create_back_button(self.right_frame, self.controller.back)
