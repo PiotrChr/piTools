@@ -17,18 +17,27 @@ class ControlCenterGUI:
         parser.add_argument("-t", "--type", help="set type (f or w)")
         args = parser.parse_args()
 
+        res_type = args.type or 'small'
+
         if settings.DEBUG:
             import sys
             print(sys.modules.keys())
 
         # Init
-        self.layout = layout.Layout(self.APP_NAME)
-        self.set_mode(args.mode and args.mode == 'f' and True or False, settings.resolution(args.type or 'small'))
+        self.layout = layout.Layout(
+            self.APP_NAME,
+            settings.DIMENSIONS[res_type]['width'],
+            settings.DIMENSIONS[res_type]['height']
+        )
+
+        self.set_mode(
+            args.mode and args.mode == 'f' and True or False,
+            settings.resolution(res_type)
+        )
 
     @staticmethod
     def initialize_v4l2():
-        # Start on arm only
-        if os.uname()[4].startswith("arm") and not os.path.exists('/dev/video0'):
+        if settings.IS_RASP and not os.path.exists('/dev/video0'):
             rpistr = "sudo modprobe bcm2835-v4l2"
             p = subprocess.Popen(rpistr, shell=True, preexec_fn=os.setsid)
             time.sleep(1)
@@ -40,7 +49,7 @@ class ControlCenterGUI:
             self.layout.set_windowed(resolution)
 
     def start(self):
-        self.layout.mainloop()
+        self.layout.start_mainloop()
 
 
 app = ControlCenterGUI()

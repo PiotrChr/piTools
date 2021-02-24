@@ -1,5 +1,4 @@
 from layout.view import mainFrame
-from layout.templating import templating
 from layout.menu.menu import menu
 
 
@@ -9,37 +8,37 @@ class HomeFrame(mainFrame.MainFrame):
     ANT_BUTTON_LABEL = 'Ant Farm'
     PRINTER_BUTTON_LABEL = '3d Printer'
 
-    def __init__(self, parent, controller):
-        super().__init__(parent, controller)
+    def __init__(self, parent, controller, templating):
+        super().__init__(parent, controller, templating)
 
-        self.right_frame = self.get_right_frame(self)
         self.pack_all()
 
-    @staticmethod
-    def get_left_frame(container):
-        left_frame = templating.create_left_frame(container)
+    def get_left_frame(self, container):
+        left_frame = self.templating.create_left_frame(container)
 
-        frame_label = templating.create_medium_label(left_frame, 'Welcome')
+        frame_label = self.templating.create_medium_label(left_frame, 'Welcome')
         frame_label.pack(expand=True)
-        left_frame.frame_label = frame_label
+        left_frame.set('frame_label', frame_label)
 
         return left_frame
 
     def get_right_frame(self, container):
-        right_frame = templating.create_right_frame(container)
+        right_frame = self.templating.create_right_frame(container)
 
         # Main Label
-        frame_label = templating.create_medium_label(right_frame, self.FRAME_LABEL)
+        frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
         frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.set('frame_label', frame_label)
 
         # Menu
         for menuItem in menu:
-            right_frame[menuItem.id + "_button"] = templating.create_bar_button(
+            name = menuItem.id + "_button"
+            item = self.templating.create_bar_button(
                 right_frame,
                 menuItem.title,
                 getattr(self.controller, menuItem.action)
             )
-            right_frame[menuItem.id + "_button"].pack()
+            item.pack()
+            right_frame.set(name, item)
 
         return right_frame

@@ -1,0 +1,3 @@
+# put in /etc/sudoers.d
+
+pi ALL = NOPASSWD: /sbin/halt, /sbin/reboot, /sbin/poweroff

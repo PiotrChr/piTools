@@ -1,10 +1,20 @@
-default: start_linux
+default: boot_pi
+
+boot_mac: deps_mac deps_mac start_mac
+
+boot_pi: deps_pi deps_pi start_pi
+
+deps_pi:
+	pip3 install -r requirements.txt
+
+deps_mac:
+	pip3 install -r requirements-mac.txt
 
 pip_linux_add:
-	pip install $(i) && pip freeze | grep $(i) >> requirements.txt
+	pip3 install $(i) && pip freeze | grep $(i) >> requirements.txt
 
 pip_mac_add:
-	pip install $(i) && pip freeze | grep $(i) >> requirements-mac.txt
+	pip3 install $(i) && pip freeze | grep $(i) >> requirements-mac.txt
 
 install_pi:
 	sh resources/setup/pi.sh

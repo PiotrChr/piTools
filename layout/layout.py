@@ -1,43 +1,55 @@
 import tkinter
-from layout.view import antFrame, homeFrame, printerFrame, statusFrame, frontDoorFrame, securityFrame
-from layout.templating import templating
-from PIL import Image, ImageTk
-import cv2
-import settings
-from library.sysUtils import SysUtils
+from layout.view import antFrame, homeFrame, printerFrame, statusFrame, frontDoorFrame, securityFrame, utilsFrame
+from infrastructure.controller import antController, frontDoorController, homeController, printerController, statusController, securityController, utilsController
+from layout.templating import create_templating
+from layout.tkinter import frame
 
 
-class Layout:
-    def __init__(self, title):
-        self.data = {}
+class Layout(frame.Frame):
+    def __init__(self, title, width, height):
         self.master = tkinter.Tk()
+        super().__init__(self.master)
         self.master.title(title)
-        self.stop_camera_signal = False
+        self.width = width
+        self.height = height
+        self.templating = create_templating(width, height)
+        self.pack()
 
-        self.layout = tkinter.Frame()
-        self.layout.pack()
+        for layout_frame in self.get_frames():
+            new_frame = layout_frame[0](
+                self,
+                layout_frame[1],
+                self.templating
+            )
+            new_frame.grid(row=0, column=0)
+            self.set(
+                layout_frame[0].__name__,
+                new_frame
+            )
 
-        for Frame in self.get_frames():
-            self[Frame.__name__] = Frame(self.layout, self)
-            self[Frame.__name__].grid(row=0, column=0, sticky="nsew")
+        utils_frame = self.get_utils_frame()
+        utils_frame.grid(row=1, column=0, sticky="snew")
+        # utils_frame.pack_propagate(False)
+        self.set('utils_frame', utils_frame)
 
         self.open_home()
 
-    def __setitem__(self, key, value):
-        self.data[key] = value
-
-    def __getitem__(self, item):
-        return self.data[item]
+    def get_utils_frame(self):
+        return utilsFrame.UtilsFrame(
+            self,
+            utilsController.UtilsController,
+            self.templating
+        )
 
     @staticmethod
     def get_frames():
         return [
-            homeFrame.HomeFrame,
-            frontDoorFrame.FrontDoorFrame,
-            antFrame.AntFrame,
-            printerFrame.PrinterFrame,
-            statusFrame.StatusFrame,
-            securityFrame.SecurityFrame
+            [homeFrame.HomeFrame, homeController.HomeController],
+            [frontDoorFrame.FrontDoorFrame, frontDoorController.FrontDoorController],
+            [antFrame.AntFrame, antController.AntController],
+            [printerFrame.PrinterFrame, printerController.PrinterController],
+            [statusFrame.StatusFrame, statusController.StatusController],
+            [securityFrame.SecurityFrame, securityController.SecurityController]
         ]
 
     def set_windowed(self, resolution='800x480'):
@@ -47,144 +59,12 @@ class Layout:
         self.master.overrideredirect(False)
         self.master.attributes('-fullscreen', True)
 
-    def open_ant(self):
-        templating.raise_frame(self[antFrame.AntFrame.__name__])
-
     def open_home(self):
         # print(self.__dict__)
-        templating.raise_frame(self[homeFrame.HomeFrame.__name__])
+        self.templating.raise_frame(
+            self.get(homeFrame.HomeFrame.__name__)
+        )
 
-    def open_front_door(self):
-        templating.raise_frame(self[frontDoorFrame.FrontDoorFrame.__name__])
-
-    def open_printer(self):
-        templating.raise_frame(self[printerFrame.PrinterFrame.__name__])
-
-    def open_status(self):
-        templating.raise_frame(self[statusFrame.StatusFrame.__name__])
-
-    def open_security(self):
-        templating.raise_frame(self[securityFrame.SecurityFrame.__name__])
-
-    def back(self):
-        templating.raise_frame(self[homeFrame.HomeFrame.__name__])
-
-    def open_printer_page(self):
-        self.not_yet_implemented()
-
-    def start_door_camera(self):
-        self.not_yet_implemented()
-
-    def stop_door_camera(self):
-        self.not_yet_implemented()
-
-    def stop_door_record(self):
-        self.not_yet_implemented()
-
-    def start_door_record(self):
-        self.not_yet_implemented()
-
-    def start_door_listen(self):
-        self.not_yet_implemented()
-
-    def stop_door_listen(self):
-        self.not_yet_implemented()
-
-    def update_camera_frame(self, image, imagetk, camera_frame):
-        self[camera_frame].left_frame.video_frame.current_image = image
-        self[camera_frame].left_frame.video_frame.imgtk = imagetk
-        self[camera_frame].left_frame.video_frame.config(image=imagetk)  # show the image
-
-    def start_capture(self, source):
-        self.vs = cv2.VideoCapture(source)
-
-        self.vs.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.vs.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
-    def stop_capture(self):
-        self.vs.release()
-        del self.vs
-
-    def video_loop(self, camera_frame):
-        if self.stop_camera_signal:
-            self.update_camera_frame('', '', camera_frame)
-            self.stop_camera_signal = False
-            return
-
-        ok, frame = self.vs.read()
-        if ok:  # frame captured without any errors
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)  # convert colors from BGR to RGBA
-            current_image = Image.fromarray(cv2image)  # convert image for PIL
-            imgtk = ImageTk.PhotoImage(image=current_image)  # convert image for tkinter
-
-            self.update_camera_frame(current_image, imgtk, camera_frame)
-        else:
-            templating.errorbox('Stream error', 'Stream error, quitting')
-            self.stop_camera_signal = True
-
-        self.master.after(100, lambda: self.video_loop(camera_frame))
-
-    def start_camera(self, source, camera_frame):
-        if hasattr(self, 'vs'):
-            self.stop_camera()
-
-        self.start_capture(source)
-        self.video_loop(camera_frame)
-
-    def stop_camera(self):
-        self.stop_camera_signal = True
-        if hasattr(self, 'vs'):
-            self.stop_capture()
-
-    def start_ant_camera(self):
-        self.start_camera(0, antFrame.AntFrame.__name__)
-
-    def stop_ant_camera(self):
-        self.stop_camera()
-
-    def start_printer_camera(self):
-        try:
-            SysUtils.validate_host(settings.PRINTER_BASE_URL, settings.PRINTER_STREAM_URL)
-        except Exception as exception:
-            templating.errorbox(message=str(exception))
-            return
-
-        self.start_camera(settings.PRINTER_STREAM_URL, printerFrame.PrinterFrame.__name__)
-
-    def stop_printer_camera(self):
-        self.stop_camera()
-
-    def start_ant_stream(self):
-        self.not_yet_implemented()
-
-    def stop_ant_stream(self):
-        self.not_yet_implemented()
-
-    def start_ant_lights(self):
-        self.not_yet_implemented()
-
-    def stop_ant_lights(self):
-        self.not_yet_implemented()
-
-    def start_ant_thermostat(self):
-        self.not_yet_implemented()
-
-    def stop_ant_thermostat(self):
-        self.not_yet_implemented()
-
-    def quit(self):
-        self.stop_camera()
-        self.master.quit()
-
-    def restart(self):
-        self.not_yet_implemented()
-
-    def halt(self):
-        self.not_yet_implemented()
-
-    def mainloop(self):
+    def start_mainloop(self):
         self.master.mainloop()
 
-    @staticmethod
-    def not_yet_implemented():
-        templating.infobox('Info', 'Not yet implemented')

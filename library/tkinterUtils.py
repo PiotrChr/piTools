@@ -7,7 +7,7 @@ class TkinterTemplating:
     def __init__(self, switch_text_on=None, switch_text_off=None, button_text_back=None, button_text_refresh=None,
                  button_width=None, button_height=None, font_size=None,
                  font_family=None, font_size_big=None, font_size_small=None, frame_height=None, frame_width=None,
-                 left_right_ratio=None, color=None):
+                 left_right_ratio=None, color=None, utils_frame_height=None, button_frame_ratio=None):
         self.switch_text_on = switch_text_on
         self.switch_text_off = switch_text_off
         self.button_text_back = button_text_back
@@ -20,15 +20,28 @@ class TkinterTemplating:
         self.font_family = font_family
         self.frame_width = frame_width
         self.frame_height = frame_height
+        self.utils_frame_height = utils_frame_height
         self.left_right_ratio = left_right_ratio
         self.color = color
         self.font_bold = font_family + ' ' + str(font_size) + ' ' + 'bold'
+        self.button_frame_ratio = button_frame_ratio
 
     def create_medium_label(self, container, text):
         return tkinter.Label(container, text=text, height=1, anchor='e', font=(self.font_family, self.font_size_big))
 
     def create_small_label(self, container, text):
         return tkinter.Label(container, text=text, height=1, font=(self.font_family, self.font_size))
+
+    def get_utils_button_height(self):
+        return int(self.utils_frame_height / self.button_frame_ratio)
+
+    def create_utils_button(self, container, text, command):
+        return self.create_button(
+            container,
+            command=command,
+            text=text,
+            height=self.get_utils_button_height()
+        )
 
     def create_keyval_label(self, container, key, value, label=None):
         keyval_frame = Frame(container)
@@ -119,16 +132,60 @@ class TkinterTemplating:
     def create_refresh_button(self, container, action):
         return self.create_bar_button(container, self.button_text_refresh, action, bg=self.color['lightgreen'])
 
+    def create_slider(self, container, from_=None, to=None, horizontal=True, command=None):
+        slider = tkinter.Scale(
+            container,
+            from_=from_,
+            to=to,
+            length=self.button_width,
+            orient=tkinter.HORIZONTAL if horizontal else tkinter.VERTICAL,
+            command=command
+        )
+
+        return slider
+
+    def create_slider_label(self, container, title=None, description=None, command=None, from_=None, to=None):
+        slider_frame = Frame(container)
+
+        slider_label = self.create_medium_label(slider_frame, title)
+        slider_frame.slider_label = slider_label
+
+        slider_description = self.create_small_label(slider_frame, description)
+        slider_frame.slider_description = slider_description
+
+        slider = self.create_slider(slider_frame, from_=from_, to=to, command=command)
+        slider_frame.slider = slider
+
+        slider_description.pack()
+        slider_label.pack()
+        slider.pack()
+        return slider_frame
+
+    def create_simple_slider_label(self, container, title=None, description=None, command=None):
+        return self.create_slider_label(container, title, description, from_=0, to=100, command=command)
+
     @staticmethod
     def raise_frame(frame):
         frame.tkraise()
+
+    def create_utils_section(self, container):
+        utils_section = Frame(
+            container,
+            height=self.utils_frame_height,
+            bg="yellow"
+        )
+
+        return utils_section
+
+    def get_inner_frame_height(self):
+        return self.frame_height - self.utils_frame_height
 
     def create_right_frame(self, container):
         right_frame = Frame(
             container,
             width=self.frame_width * (1 - self.left_right_ratio),
-            height=self.frame_height,
-            # bg='orange',
+            height=self.get_inner_frame_height(),
+            bg='orange',
             # borderwidth=1,
             # relief="solid",
         )
@@ -139,11 +196,15 @@ class TkinterTemplating:
         left_frame = Frame(
             container,
             width=self.frame_width * self.left_right_ratio,
-            height=self.frame_height,
+            height=self.get_inner_frame_height(),
             # bg='violet',
         )
 
         return left_frame
+
+    @staticmethod
+    def promptbox(title="Prompt", message=None):
+        return messagebox.askokcancel(title, message)
 
     @staticmethod
     def infobox(title="Info", message=None):
