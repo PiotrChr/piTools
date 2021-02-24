@@ -9,7 +9,6 @@ class PrinterFrame(mainFrame.MainFrame):
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
 
-        self.right_frame = self.get_right_frame(self)
         self.add_back_button()
         self.pack_all()
 
@@ -19,7 +18,7 @@ class PrinterFrame(mainFrame.MainFrame):
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
         frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.set('frame_label', frame_label)
 
         # Printer Page
         printer_page_button = self.templating.create_bar_button(
@@ -28,7 +27,7 @@ class PrinterFrame(mainFrame.MainFrame):
             action=self.controller.open_printer_page
         )
         printer_page_button.pack()
-        printer_page_button.printer_page_button = printer_page_button
+        right_frame.set('printer_page_button', printer_page_button)
 
         # Printer Camera
         camera_button = self.templating.create_switch_button_frame(
@@ -38,6 +37,6 @@ class PrinterFrame(mainFrame.MainFrame):
             self.CAMERA_BUTTON_LABEL
         )
         camera_button.pack()
-        right_frame.camera_button = camera_button
+        right_frame.set('camera_button', camera_button)
 
         return right_frame

@@ -7,7 +7,6 @@ class SecurityFrame(mainFrame.MainFrame):
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
 
-        self.right_frame = self.get_right_frame(self)
         self.add_back_button()
         self.pack_all()
 
@@ -17,6 +16,6 @@ class SecurityFrame(mainFrame.MainFrame):
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
         frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.set('frame_label', frame_label)
 
         return right_frame

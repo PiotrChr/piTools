@@ -13,16 +13,25 @@ class Layout(frame.Frame):
         self.width = width
         self.height = height
         self.templating = create_templating(width, height)
-
-        for home_frame in self.get_frames():
-            name = frame.Frame.create_name(home_frame[0].__name__)
-            self[name] = home_frame[0](self, home_frame[1], self.templating)
-            self[name].grid(row=0, column=0, sticky="nsew")
-
-        self.utils_frame = self.get_utils_frame()
-        self.utils_frame.grid(row=1, column=0, columnspan=2)
-
         self.pack()
+
+        for layout_frame in self.get_frames():
+            new_frame = layout_frame[0](
+                self,
+                layout_frame[1],
+                self.templating
+            )
+            new_frame.grid(row=0, column=0)
+            self.set(
+                layout_frame[0].__name__,
+                new_frame
+            )
+
+        utils_frame = self.get_utils_frame()
+        utils_frame.grid(row=1, column=0, sticky="snew")
+        # utils_frame.pack_propagate(False)
+        self.set('utils_frame', utils_frame)
+
         self.open_home()
 
     def get_utils_frame(self):
@@ -52,7 +61,9 @@ class Layout(frame.Frame):
 
     def open_home(self):
         # print(self.__dict__)
-        self.templating.raise_frame(self[homeFrame.HomeFrame.__name__])
+        self.templating.raise_frame(
+            self.get(homeFrame.HomeFrame.__name__)
+        )
 
     def start_mainloop(self):
         self.master.mainloop()

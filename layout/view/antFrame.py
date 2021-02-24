@@ -11,7 +11,6 @@ class AntFrame(mainFrame.MainFrame):
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
 
-        self.right_frame = self.get_right_frame(self)
         self.add_back_button()
         self.pack_all()
 
@@ -21,7 +20,7 @@ class AntFrame(mainFrame.MainFrame):
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
         frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.set('frame_label', frame_label)
 
         # Camera
         camera_button = self.templating.create_switch_button_frame(
@@ -31,7 +30,7 @@ class AntFrame(mainFrame.MainFrame):
             self.ANT_CAMERA_LABEL
         )
         camera_button.pack()
-        right_frame.camera_frame = camera_button
+        right_frame.set('camera_button', camera_button)
 
         # Stream
         stream_button = self.templating.create_switch_button_frame(
@@ -41,7 +40,7 @@ class AntFrame(mainFrame.MainFrame):
             self.ANT_STREAM_LABEL
         )
         stream_button.pack()
-        right_frame.stream_frame = stream_button
+        right_frame.set('stream_frame', stream_button)
 
         # Lights
         lights_button = self.templating.create_switch_button_frame(
@@ -51,7 +50,7 @@ class AntFrame(mainFrame.MainFrame):
             self.ANT_LIGHTS_LABEL
         )
         lights_button.pack()
-        right_frame.lights_button = lights_button
+        right_frame.set('lights_button', lights_button)
 
         # Thermostat
         thermostat_button = self.templating.create_switch_button_frame(
@@ -61,6 +60,6 @@ class AntFrame(mainFrame.MainFrame):
             self.ANT_THERMOSTAT_LABEL
         )
         thermostat_button.pack()
-        right_frame.thermostat_button = thermostat_button
+        right_frame.set('thermostat_button', thermostat_button)
 
         return right_frame

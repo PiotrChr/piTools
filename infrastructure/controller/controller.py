@@ -75,7 +75,7 @@ class Controller:
         self.layout.master.after(100, lambda: self.video_loop(camera_frame))
 
     def back(self):
-        self.templating.raise_frame(self.layout[HomeFrame.__name__])
+        self.templating.raise_frame(self.layout.get(HomeFrame.__name__))
 
     def update_camera_frame(self, image, imagetk, camera_frame):
         self.layout[camera_frame].left_frame.video_frame.current_image = image

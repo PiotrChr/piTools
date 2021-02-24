@@ -1,23 +1,19 @@
 import tkinter
 
 
-class Frame(tkinter.Frame, dict):
+class Frame(tkinter.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data = {}
 
-    def __setitem__(self, key, value):
-        if not key.startswith(self.prefix()):
-            self.configure({key: value})
-            return
-
-        if not hasattr(self, 'data'):
-            self.data = {}
-
+    def set(self, key, value):
         self.data[key] = value
 
-    def __getitem__(self, key):
-        if not key.startswith(self.prefix()):
-            return self.cget(key)
+    def get(self, key):
+        if key in self.data:
+            return self.data[key]
 
-        return self.data[key]
+        return None
 
     @staticmethod
     def prefix():

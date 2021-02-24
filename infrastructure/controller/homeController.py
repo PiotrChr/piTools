@@ -8,25 +8,25 @@ class HomeController(Controller):
 
     def open_printer(self):
         self.templating.raise_frame(
-            self.layout[printerFrame.PrinterFrame.create_name(printerFrame.PrinterFrame.__name__)]
+            self.layout.get(printerFrame.PrinterFrame.__name__)
         )
 
     def open_status(self):
         self.templating.raise_frame(
-            self.layout[statusFrame.StatusFrame.create_name(statusFrame.StatusFrame.__name__)]
+            self.layout.get(statusFrame.StatusFrame.__name__)
         )
 
     def open_security(self):
         self.templating.raise_frame(
-            self.layout[securityFrame.SecurityFrame.create_name(securityFrame.SecurityFrame.__name__)]
+            self.layout.get(securityFrame.SecurityFrame.__name__)
         )
 
     def open_ant(self):
         self.templating.raise_frame(
-            self.layout[antFrame.AntFrame.create_name(antFrame.AntFrame.__name__)]
+            self.layout.get(antFrame.AntFrame.__name__)
         )
 
     def open_front_door(self):
         self.templating.raise_frame(
-            self.layout[frontDoorFrame.FrontDoorFrame.create_name(frontDoorFrame.FrontDoorFrame.__name__)]
+            self.layout.get(frontDoorFrame.FrontDoorFrame.__name__)
         )
