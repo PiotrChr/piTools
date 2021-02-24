@@ -11,7 +11,6 @@ class HomeFrame(mainFrame.MainFrame):
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
 
-        self.right_frame = self.get_right_frame(self)
         self.pack_all()
 
     def get_left_frame(self, container):
@@ -19,7 +18,7 @@ class HomeFrame(mainFrame.MainFrame):
 
         frame_label = self.templating.create_medium_label(left_frame, 'Welcome')
         frame_label.pack(expand=True)
-        left_frame.frame_label = frame_label
+        left_frame.set('frame_label', frame_label)
 
         return left_frame
 
@@ -29,15 +28,17 @@ class HomeFrame(mainFrame.MainFrame):
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
         frame_label.pack()
-        right_frame.frame_label = frame_label
+        right_frame.set('frame_label', frame_label)
 
         # Menu
         for menuItem in menu:
-            right_frame[menuItem.id + "_button"] = self.templating.create_bar_button(
+            name = menuItem.id + "_button"
+            item = self.templating.create_bar_button(
                 right_frame,
                 menuItem.title,
                 getattr(self.controller, menuItem.action)
             )
-            right_frame[menuItem.id + "_button"].pack()
+            item.pack()
+            right_frame.set(name, item)
 
         return right_frame

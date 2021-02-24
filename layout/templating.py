@@ -17,5 +17,7 @@ def create_templating(width, height):
         frame_width=width,
         frame_height=height,
         left_right_ratio=settings.LAYOUT_FRAME_LEFT_RIGHT_RATIO,
-        color=settings.COLOR
+        utils_frame_height=settings.UTILS_FRAME_HEIGHT,
+        color=settings.COLOR,
+        button_frame_ratio=settings.BUTTON_FRAME_RATIO
     )

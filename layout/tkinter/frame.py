@@ -2,12 +2,26 @@ import tkinter
 
 
 class Frame(tkinter.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data = {}
 
-    def __setitem__(self, key, value):
-        if not hasattr(self, 'data'):
-            self.data = {}
-
+    def set(self, key, value):
         self.data[key] = value
 
-    def __getitem__(self, item):
-        return self.data[item]
+    def get(self, key):
+        if key in self.data:
+            return self.data[key]
+
+        return None
+
+    @staticmethod
+    def prefix():
+        return 'layout_'
+
+    def name(self):
+        return self.prefix + self.__name__
+
+    @staticmethod
+    def create_name(name):
+        return Frame.prefix() + name

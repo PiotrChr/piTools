@@ -3,8 +3,8 @@ from layout.view.antFrame import AntFrame
 
 
 class AntController(Controller):
-    def __init__(self, templating, layout):
-        super().__init__(templating, layout)
+    def __init__(self, layout):
+        super().__init__(layout)
 
     def start_ant_camera(self):
         self.start_camera(0, AntFrame.__name__)
