@@ -6,6 +6,7 @@ class FrontDoorFrame(mainFrame.MainFrame):
     CAMERA_LABEL = 'Camera'
     RECORD_LABEL = 'Record'
     LISTEN_LABEL = 'Listen'
+    LIGHT_LABEL = 'Light'
 
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
@@ -31,6 +32,16 @@ class FrontDoorFrame(mainFrame.MainFrame):
         )
         camera_button.pack()
         right_frame.set('camera_button', camera_button)
+
+        # Lights
+        light_button = self.templating.create_switch_button_frame(
+            right_frame,
+            self.controller.light_on,
+            self.controller.light_off,
+            self.LIGHT_LABEL
+        )
+        light_button.pack()
+        right_frame.set('light_button', light_button)
 
         # Record
         record_button = self.templating.create_switch_button_frame(

@@ -29,3 +29,9 @@ class FrontDoorController(Controller):
 
     def stop_door_listen(self):
         self.not_yet_implemented()
+
+    def light_on(self):
+        self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_LIGHT_ON)
+
+    def light_off(self):
+        self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_LIGHT_OFF)
