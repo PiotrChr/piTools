@@ -1,5 +1,6 @@
 from infrastructure.controller.controller import Controller
 from layout.view import homeFrame
+from library import sysUtils
 
 
 class UtilsController(Controller):
@@ -7,7 +8,8 @@ class UtilsController(Controller):
         super().__init__(layout)
 
     def start_screen_keyboard(self):
-        self.not_yet_implemented()
+        # Todo: Add a condition for Pi / pass some systems_settings struct to it
+        sysUtils.run_screen_keyboard()
 
     def go_home(self):
         self.templating.raise_frame(

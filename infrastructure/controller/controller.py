@@ -23,7 +23,7 @@ class Controller:
             self.stop_camera()
 
         self.start_capture(source)
-        self.video_loop(camera_frame, self.update_camera_frame)
+        self.video_loop(camera_frame)
 
     def stop_camera(self):
         self.stop_camera_signal = True
@@ -55,9 +55,9 @@ class Controller:
         if self.templating.promptbox(None, 'Are you sure?'):
             os.system('halt')
 
-    def video_loop(self, camera_frame, update_camera_frame):
+    def video_loop(self, camera_frame):
         if self.stop_camera_signal:
-            update_camera_frame('', '', camera_frame)
+            self.update_camera_frame('', '', camera_frame)
             self.stop_camera_signal = False
             return
 
@@ -67,7 +67,7 @@ class Controller:
             current_image = Image.fromarray(cv2image)  # convert image for PIL
             imgtk = ImageTk.PhotoImage(image=current_image)  # convert image for tkinter
 
-            self.layout.master(current_image, imgtk, camera_frame)
+            self.update_camera_frame(current_image, imgtk, camera_frame)
         else:
             self.templating.errorbox('Stream error', 'Stream error, quitting')
             self.stop_camera_signal = True
@@ -78,6 +78,11 @@ class Controller:
         self.templating.raise_frame(self.layout.get(HomeFrame.__name__))
 
     def update_camera_frame(self, image, imagetk, camera_frame):
-        self.layout[camera_frame].left_frame.video_frame.current_image = image
-        self.layout[camera_frame].left_frame.video_frame.imgtk = imagetk
-        self.layout[camera_frame].left_frame.video_frame.config(image=imagetk)  # show the image
+        video_frame = self.layout\
+            .get(camera_frame)\
+            .get('left_frame')\
+            .get('video_frame')
+
+        video_frame.current_image = image
+        video_frame.imgtk = imagetk
+        video_frame.config(image=imagetk)  # show the image
