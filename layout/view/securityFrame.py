@@ -15,7 +15,7 @@ class SecurityFrame(mainFrame.MainFrame):
 
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, text=self.FRAME_LABEL)
-        frame_label.pack()
+        frame_label.pack(pady=20)
         right_frame.set('frame_label', frame_label)
 
         return right_frame

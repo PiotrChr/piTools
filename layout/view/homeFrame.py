@@ -27,7 +27,7 @@ class HomeFrame(mainFrame.MainFrame):
 
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
-        frame_label.pack()
+        frame_label.pack(pady=20)
         right_frame.set('frame_label', frame_label)
 
         # Menu

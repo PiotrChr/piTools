@@ -12,7 +12,6 @@ class TkinterTemplating:
         self.switch_text_off = switch_text_off
         self.button_text_back = button_text_back
         self.button_text_refresh = button_text_refresh
-        self.button_width = button_width
         self.button_height = button_height
         self.font_size = font_size
         self.font_size_big = font_size_big
@@ -25,6 +24,7 @@ class TkinterTemplating:
         self.color = color
         self.font_bold = font_family + ' ' + str(font_size) + ' ' + 'bold'
         self.button_frame_ratio = button_frame_ratio
+        self.button_width = int(self.get_right_frame_width() / 11)
 
     def create_medium_label(self, container, text):
         return tkinter.Label(container, text=text, height=1, anchor='e', font=(self.font_family, self.font_size_big))
@@ -63,8 +63,15 @@ class TkinterTemplating:
         return keyval_frame
 
     def create_switch_button_frame(self, container, action_on, action_off, label=None, label_on=None,
-                                   label_off=None):
+                                   label_off=None, default=None):
         button_frame = Frame(container)
+
+        def btn_handler(widget, action):
+            other_button = 'on_button' if action == action_off else 'off_button'
+
+            button_frame.get(other_button).config(font=(None, 13, 'normal'))
+            widget.config(font=(None, 13, 'bold'))
+            action()
 
         row = 0
         if label:
@@ -76,24 +83,24 @@ class TkinterTemplating:
         on_button = self.create_button(
             button_frame,
             text=label_on or self.switch_text_on,
-            command=action_on,
             width=(self.button_width // 2) - 2,
             height=self.button_height,
             bg=self.color['lightgreen']
         )
+        on_button.bind('<Button-1>', lambda event: btn_handler(event.widget, action_on))
         on_button.grid(column=0, row=row)
-        button_frame.on_button = on_button
+        button_frame.set('on_button', on_button)
 
         off_button = self.create_button(
             button_frame,
             text=label_off or self.switch_text_off,
-            command=action_off,
             width=(self.button_width // 2) - 2,
             height=self.button_height,
             bg=self.color['lightred']
         )
         off_button.grid(column=1, row=row)
-        button_frame.off_button = off_button
+        off_button.bind('<Button-1>', lambda event: btn_handler(event.widget, action_off))
+        button_frame.set('off_button', off_button)
 
         return button_frame
 
@@ -180,10 +187,13 @@ class TkinterTemplating:
     def get_inner_frame_height(self):
         return self.frame_height - self.utils_frame_height
 
+    def get_right_frame_width(self):
+        return self.frame_width * (1 - self.left_right_ratio)
+
     def create_right_frame(self, container):
         right_frame = Frame(
             container,
-            width=self.frame_width * (1 - self.left_right_ratio),
+            width=self.get_right_frame_width(),
             height=self.get_inner_frame_height(),
             bg='orange',
             # borderwidth=1,
