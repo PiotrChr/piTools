@@ -195,7 +195,7 @@ class TkinterTemplating:
             container,
             width=self.get_right_frame_width(),
             height=self.get_inner_frame_height(),
-            bg='orange',
+            # bg='orange',
             # borderwidth=1,
             # relief="solid",
         )
