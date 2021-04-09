@@ -3,6 +3,8 @@ from layout.view.homeFrame import HomeFrame
 import os
 from PIL import Image, ImageTk
 import cv2
+import sys
+import psutil
 
 
 class Controller:
@@ -49,6 +51,18 @@ class Controller:
 
     def restart(self):
         if self.templating.promptbox(None, 'Are you sure?'):
+            try:
+                p = psutil.Process(os.getpid())
+                for handler in p.open_files() + p.connections():
+                    os.close(handler.fd)
+            except Exception as e:
+                print(e)
+
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
+
+    def reboot(self):
+        if self.templating.promptbox(None, 'Are you sure? System will reboot completely.'):
             os.system('reboot')
 
     def halt(self):

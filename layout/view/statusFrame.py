@@ -8,6 +8,7 @@ class StatusFrame(mainFrame.MainFrame):
     FRAME_LABEL = 'Status'
     QUIT_BUTTON_LABEL = 'Quit'
     RESTART_BUTTON_LABEL = 'Restart'
+    REBOOT_BUTTON_LABEL = 'Reboot'
     HALT_BUTTON_LABEL = 'Halt'
 
     def __init__(self, parent, controller, templating):
@@ -92,10 +93,20 @@ class StatusFrame(mainFrame.MainFrame):
             right_frame,
             title=self.RESTART_BUTTON_LABEL,
             action=self.controller.restart,
-            bg='orange'
+            bg='yellow'
         )
         restart_button.pack()
         right_frame.set('restart_button', restart_button)
+
+        # Reboot
+        reboot_button = self.templating.create_bar_button(
+            right_frame,
+            title=self.REBOOT_BUTTON_LABEL,
+            action=self.controller.reboot,
+            bg='orange'
+        )
+        reboot_button.pack()
+        right_frame.set('reboot_button', reboot_button)
 
         # Halt
         halt_button = self.templating.create_bar_button(
