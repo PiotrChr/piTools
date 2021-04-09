@@ -8,7 +8,7 @@ class UtilsFrame(frame.Frame):
             parent,
             width=templating.frame_width,
             height=templating.utils_frame_height,
-            bg='violet',
+            # bg='violet',
             # borderwidth=2
         )
         self.controller = controller(layout=parent)

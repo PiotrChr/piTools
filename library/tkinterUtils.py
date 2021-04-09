@@ -179,7 +179,7 @@ class TkinterTemplating:
         utils_section = Frame(
             container,
             height=self.utils_frame_height,
-            bg="yellow"
+            # bg="yellow"
         )
 
         return utils_section

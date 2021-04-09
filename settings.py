@@ -38,8 +38,8 @@ DIMENSIONS = {
         'height': 480
     },
     'square': {
-        'width': 1080,
-        'height': 900
+        'width': 1135,
+        'height': 1030
     },
     'other': {
         'width': 1280,
