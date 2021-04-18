@@ -12,6 +12,10 @@ FRONT_DOOR_STREAM_PATH = ':8001/video_feed'
 FRONT_DOOR_STREAM_START_PATH = ':8001/feed_start'
 FRONT_DOOR_STREAM_STOP_PATH = ':8001/feed_stop'
 FRONT_DOOR_STREAM_STATUS_PATH = ':8001/feed_status'
+FRONT_DOOR_MAINTENANCE = ':8001/maintenance'
+FRONT_DOOR_CLEAR_ACC = ':8001/maintenance/clear_acc'
+FRONT_DOOR_CLEAR_MOTION = ':8001/maintenance/clear_motion'
+FRONT_DOOR_CLEAR_LIGHT = ':8001/maintenance/clear_light'
 
 
 NET_DEVICES = ['eth0', 'en0', 'wlan0']

@@ -1,6 +1,7 @@
 from layout.tkinter import frame
 from tkinter import Grid
 
+
 class UtilsFrame(frame.Frame):
 
     def __init__(self, parent, controller, templating):

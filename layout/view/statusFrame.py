@@ -15,12 +15,13 @@ class StatusFrame(mainFrame.MainFrame):
         super().__init__(parent, controller, templating)
 
         self.add_refresh_button()
-        self.add_back_button()
-        self.bind_events()
+        self.add_sub_frame_switch()
         self.pack_all()
+        self.open_default_sub_frames()
+        self.bind_events()
 
-    def get_left_frame(self, container):
-        left_frame = self.templating.create_left_frame(container)
+    def create_main_left_frame(self, container):
+        left_frame = self.templating.create_left_sub_frame(container)
 
         status_section = frame.Frame(left_frame)
         status_section.pack(expand=True)
@@ -70,8 +71,8 @@ class StatusFrame(mainFrame.MainFrame):
 
         return left_frame
 
-    def get_right_frame(self, container):
-        right_frame = self.templating.create_right_frame(container)
+    def create_main_right_frame(self, container):
+        right_frame = self.templating.create_right_sub_frame(container)
 
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
@@ -127,8 +128,7 @@ class StatusFrame(mainFrame.MainFrame):
         printer_host_up = True
         front_door_host_up = True
 
-        self\
-            .get('left_frame')\
+        self.get_left_sub_frame(self.MAIN_FRAME)['frame']\
             .get('status_section')\
             .get('host_uptime_label')\
             .value_text.config(
@@ -146,7 +146,7 @@ class StatusFrame(mainFrame.MainFrame):
             front_door_host_up = False
 
         self\
-            .get('left_frame')\
+            .get_left_sub_frame(self.MAIN_FRAME)['frame']\
             .get('status_section')\
             .get('printer_host_name_label')\
             .value_text.config(
@@ -154,7 +154,7 @@ class StatusFrame(mainFrame.MainFrame):
             )
 
         self\
-            .get('left_frame')\
+            .get_left_sub_frame(self.MAIN_FRAME)['frame']\
             .get('status_section')\
             .get('front_door_host_name_label').\
             value_text.config(
@@ -162,10 +162,10 @@ class StatusFrame(mainFrame.MainFrame):
             )
 
     def add_refresh_button(self):
-        right_frame = self.get('right_frame')
+        right_sub_frame = self.get_right_sub_frame(self.MAIN_FRAME)['frame']
 
         refresh_button = self.templating.create_refresh_button(
-            right_frame,
+            right_sub_frame,
             self.refresh
         )
-        right_frame.set('refresh_button', refresh_button)
+        right_sub_frame.set(self.REFRESH_BUTTON, refresh_button)

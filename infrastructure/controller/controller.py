@@ -42,6 +42,9 @@ class Controller:
         self.vs.release()
         del self.vs
 
+    def done_infobox(self):
+        self.templating.infobox('Info', 'Done')
+
     def not_yet_implemented(self):
         self.templating.infobox('Info', 'Not yet implemented')
 

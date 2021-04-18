@@ -133,8 +133,8 @@ class TkinterTemplating:
 
         return button
 
-    def create_back_button(self, container, action):
-        return self.create_bar_button(container, self.button_text_back, action, bg=self.color['lightgreen'])
+    def create_back_button(self, container, action, text=None):
+        return self.create_bar_button(container, text or self.button_text_back, action, bg=self.color['lightgreen'])
 
     def create_refresh_button(self, container, action):
         return self.create_bar_button(container, self.button_text_refresh, action, bg=self.color['lightgreen'])
@@ -202,6 +202,18 @@ class TkinterTemplating:
 
         return right_frame
 
+    def create_right_sub_frame(self, container):
+        right_sub_frame = Frame(
+            container,
+            width=self.get_right_frame_width(),
+            height=self.get_inner_frame_height(),
+            bg='orange',
+            # borderwidth=1,
+            # relief="solid",
+        )
+
+        return right_sub_frame
+
     def create_left_frame(self, container):
         left_frame = Frame(
             container,
@@ -211,6 +223,18 @@ class TkinterTemplating:
         )
 
         return left_frame
+
+    def create_left_sub_frame(self, container):
+        left_sub_frame = Frame(
+            container,
+            width=self.frame_width * self.left_right_ratio,
+            height=self.get_inner_frame_height(),
+            bg='violet',
+            # borderwidth=1,
+            # relief="solid",
+        )
+
+        return left_sub_frame
 
     @staticmethod
     def promptbox(title="Prompt", message=None):

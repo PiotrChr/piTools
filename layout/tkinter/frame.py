@@ -4,6 +4,7 @@ import tkinter
 class Frame(tkinter.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.sub_frames = {}
         self.data = {}
 
     def set(self, key, value):

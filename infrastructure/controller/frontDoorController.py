@@ -24,6 +24,34 @@ class FrontDoorController(Controller):
     def start_door_record(self):
         self.not_yet_implemented()
 
+    def show_status(self):
+        self.not_yet_implemented()
+
+    def clear_acc(self):
+        if self.templating.promptbox(None, 'Are you sure?'):
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_ACC)
+            # TODO: Should refresh any active status
+
+    def clear_motion(self):
+        if self.templating.promptbox(None, 'Are you sure?'):
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_MOTION)
+            # TODO: Should refresh any active status
+            self.done_infobox()
+
+    def clear_light(self):
+        if self.templating.promptbox(None, 'Are you sure?'):
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_LIGHT)
+            # TODO: Should refresh any active status
+            self.done_infobox()
+
+    def clear_all(self):
+        if self.templating.promptbox(None, 'Are you sure?'):
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_LIGHT)
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_MOTION)
+            self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_CLEAR_ACC)
+            # TODO: Should refresh any active status
+            self.done_infobox()
+
     def start_door_listen(self):
         self.not_yet_implemented()
 
@@ -35,3 +63,15 @@ class FrontDoorController(Controller):
 
     def light_off(self):
         self.http_client.get(settings.FRONT_DOOR_BASE_URL + settings.FRONT_DOOR_LIGHT_OFF)
+
+    def acc_graph(self):
+        self.not_yet_implemented()
+
+    def light_graph(self):
+        self.not_yet_implemented()
+
+    def motion_graph(self):
+        self.not_yet_implemented()
+
+    def main_view(self):
+        self.not_yet_implemented()

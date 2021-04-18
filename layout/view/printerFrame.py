@@ -9,11 +9,12 @@ class PrinterFrame(mainFrame.MainFrame):
     def __init__(self, parent, controller, templating):
         super().__init__(parent, controller, templating)
 
-        self.add_back_button()
+        self.add_sub_frame_switch()
         self.pack_all()
+        self.open_default_sub_frames()
 
-    def get_right_frame(self, container):
-        right_frame = self.templating.create_right_frame(container)
+    def create_main_right_frame(self, container):
+        right_frame = self.templating.create_right_sub_frame(container)
 
         # Main Label
         frame_label = self.templating.create_medium_label(right_frame, self.FRAME_LABEL)
